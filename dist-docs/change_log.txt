@@ -49,7 +49,9 @@ Ver.15 (May 10, 2026)
   any number which is larger than 0 to activate.
 - Deprecated properties INTERMediator.titleAsLinkInfo, INTERMediator.classAsLinkInfo and INTERMediator.defDivider are
   removed from code.
-- [Bug Fix]On version 12, INTERMediator.clearCondition method clears page number of pagination in any case.
+- Switch to installing npm packages via the Takumi Guard proxy to improve security of software supply chain.
+- Start using pnpm when installing npm packages for E2E testing to improve security of software supply chain.
+- [Bug Fix] On version 12, INTERMediator.clearCondition method clears page number of pagination in any case.
   INTERMediator.clearCondition should be cleared any parameter, just clears all conditions.
 - [SECURITY ISSUES] The account manager of sample code can be accessed on same case. So the samples are moved to
   another repository.
