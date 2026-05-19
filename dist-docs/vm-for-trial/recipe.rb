@@ -1319,8 +1319,8 @@ if node[:platform] == 'redhat' && node[:platform_version].to_f >= 7 && node[:pla
   end
 end
 
-execute "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer install'" do
-  command "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer install'"
+execute "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer update'" do
+  command "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer update'"
 end
 
 # Install npm packages
@@ -2347,8 +2347,8 @@ if node[:platform] == 'alpine'
   execute "\"#{IMROOT}\"/dist-docs/installfiles.sh -2" do
     command "\"#{IMROOT}\"/dist-docs/installfiles.sh -2"
   end
-  execute "cd \"#{IMROOT}\";composer install" do
-    command "cd \"#{IMROOT}\";composer install"
+  execute "cd \"#{IMROOT}\";composer update" do
+    command "cd \"#{IMROOT}\";composer update"
   end
   execute "cd \"#{IMROOT}\";npm install --before 2026-02-27" do
     command "cd \"#{IMROOT}\";npm install --before 2026-02-27"

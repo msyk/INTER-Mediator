@@ -14,6 +14,8 @@ echo "Target Directory: $(pwd)"
 echo "******************************************************"
 mv '__Did_you_run_composer_update.txt' spec/tempfile
 composer update
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+export PATH="$SCRIPT_DIR/../vendor/bin:$PATH"
 mv spec/tempfile '__Did_you_run_composer_update.txt'
 
 cd spec/run
