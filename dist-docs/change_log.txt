@@ -12,7 +12,7 @@ Also the Migration Guide (Japanese) might be informative:
 
 Ver.16 (in Development)
 
-Ver.15 (May 10, 2026)
+Ver.15 (May 24, 2026)
 - Passkey authentication is supported. The $authStoring variable or the "storing" key value have to set the "passkey".
   The "autofill" UI of passkey authentication is supported by $isAddClassAuthn in params.php file, or 'add-class-authn'
   key value in definition file.
