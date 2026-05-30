@@ -6,6 +6,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=8.1",
+    "composer-plugin-api": "^2.0",
     "ext-mbstring": "*",
     "ext-pdo": "*",
     "ext-curl": "*",
@@ -16,7 +17,6 @@
     "ext-gd": "*",
     "ext-intl": "*",
     "ext-posix": "*",
-    "mouf/nodejs-installer": ">=1",
     "inter-mediator/fmdataapi": ">=36",
     "tecnickcom/tcpdf": ">=6.9",
     "aws/aws-sdk-php": ">=3",
@@ -34,12 +34,7 @@
     "web-auth/webauthn-lib": "*"
   },
   "extra": {
-    "mouf": {
-      "nodejs": {
-        "version": "^24",
-        "includeBinInPath": true
-      }
-    }
+    "class": "INTERMediator\\Composer\\InstallerPlugin"
   },
   "require-dev": {
     "phpunit/phpunit": "^10 || ^11",
@@ -51,7 +46,7 @@
     }
   },
   "description": "The INTER-Mediator is framework for database-driven web application.",
-  "type": "library",
+  "type": "composer-plugin",
   "keywords": [
     "framework",
     "declarative",
@@ -89,20 +84,19 @@
     "clear": [
       "rm -rf node_modules vendor"
     ],
-    "post-update-cmd": [
-      "./vendor/bin/npm ci",
-      "rm -f __Did_you_run_composer_update.txt"
-    ],
     "post-install-cmd": [
-      "./vendor/bin/npm ci",
-      "rm -f __Did_you_run_composer_update.txt"
+      "INTERMediator\\Composer\\InstallerPlugin::onPostInstallCmd"
+    ],
+    "post-update-cmd": [
+      "INTERMediator\\Composer\\InstallerPlugin::onPostUpdateCmd"
     ]
   },
   "config": {
     "allow-plugins": {
       "simplesamlphp/composer-module-installer": true,
       "mouf/nodejs-installer": true,
-      "simplesamlphp/composer-xmlprovider-installer": true
+      "simplesamlphp/composer-xmlprovider-installer": true,
+      "inter-mediator/inter-mediator": true
     }
   },
   "github-oauth": {
