@@ -16,7 +16,6 @@
     "ext-exif": "*",
     "ext-gd": "*",
     "ext-intl": "*",
-    "ext-posix": "*",
     "inter-mediator/fmdataapi": ">=36",
     "tecnickcom/tcpdf": ">=6.9",
     "aws/aws-sdk-php": ">=3",
