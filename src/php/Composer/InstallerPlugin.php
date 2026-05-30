@@ -98,8 +98,7 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
                     $io,
                     $baseDir,
                     'powershell -NoProfile -ExecutionPolicy Bypass -Command '
-                    . '"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; '
-                    . 'Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression; '
+                    . '"Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression; '
                     . 'pnpm ci"'
                 );
             } else {
