@@ -100,7 +100,10 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
         } else {
             // macOS / Linux: install pnpm via the official shell installer
             self::executeCommand($io, $baseDir, 'curl -fsSL https://get.pnpm.io/install.sh | sh -');
-            self::executeCommand($io, $baseDir, 'sh -c "pnpm ci" ');
+            $pnpmHome = PHP_OS_FAMILY === 'Darwin'
+                ? '$HOME/Library/pnpm'
+                : '${XDG_DATA_HOME:-$HOME/.local/share}/pnpm';
+            self::executeCommand($io, $baseDir, sprintf('export PNPM_HOME="%s"; export PATH="$PNPM_HOME:$PATH"; pnpm ci', $pnpmHome));
         }
         @unlink($baseDir . '/__Did_you_run_composer_update.txt');
 
