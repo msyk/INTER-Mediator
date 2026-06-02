@@ -84,26 +84,38 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
         if (self::isInstalledAsDependency($composer)) {
             // INTER-Mediator was installed as a dependency via "composer require".
             $io->write('<info>INTER-Mediator: Running post-install tasks (dependency mode)...</info>');
+            if (PHP_OS_FAMILY === 'Windows') {
+                // Windows: install pnpm via PowerShell
+                self::executeCommand($io, $baseDir, 'powershell -NoProfile -ExecutionPolicy Bypass -Command '
+                    . '"Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression; '
+                    . 'pnpm ci"'
+                );
+            } else {
+                // macOS / Linux: install pnpm via the official shell installer
+                self::executeCommand($io, $baseDir, 'curl -fsSL https://get.pnpm.io/install.sh | sh -');
+                $pnpmHome = PHP_OS_FAMILY === 'Darwin'
+                    ? '$HOME/Library/pnpm'
+                    : '${XDG_DATA_HOME:-$HOME/.local/share}/pnpm';
+                self::executeCommand($io, $baseDir, "cd ./vendor/inter-mediator/inter-mediator; {$pnpmHome}/bin/pnpm ci");
+                self::executeCommand($io, $baseDir, "./vendor/inter-mediator/inter-mediator/dist-docs/generateminifyjshere.sh");
+            }
         } else {
             // INTER-Mediator is the root project (e.g., git clone + composer install).
             $io->write('<info>INTER-Mediator: Running post-install tasks (root project mode)...</info>');
-        }
-        if (PHP_OS_FAMILY === 'Windows') {
-            // Windows: install pnpm via PowerShell
-            self::executeCommand(
-                $io,
-                $baseDir,
-                'powershell -NoProfile -ExecutionPolicy Bypass -Command '
-                . '"Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression; '
-                . 'pnpm ci"'
-            );
-        } else {
-            // macOS / Linux: install pnpm via the official shell installer
-            self::executeCommand($io, $baseDir, 'curl -fsSL https://get.pnpm.io/install.sh | sh -');
-            $pnpmHome = PHP_OS_FAMILY === 'Darwin'
-                ? '$HOME/Library/pnpm'
-                : '${XDG_DATA_HOME:-$HOME/.local/share}/pnpm';
-            self::executeCommand($io, $baseDir, "{$pnpmHome}/bin/pnpm ci");
+            if (PHP_OS_FAMILY === 'Windows') {
+                // Windows: install pnpm via PowerShell
+                self::executeCommand($io, $baseDir, 'powershell -NoProfile -ExecutionPolicy Bypass -Command '
+                    . '"Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression; '
+                    . 'pnpm ci"'
+                );
+            } else {
+                // macOS / Linux: install pnpm via the official shell installer
+                self::executeCommand($io, $baseDir, 'curl -fsSL https://get.pnpm.io/install.sh | sh -');
+                $pnpmHome = PHP_OS_FAMILY === 'Darwin'
+                    ? '$HOME/Library/pnpm'
+                    : '${XDG_DATA_HOME:-$HOME/.local/share}/pnpm';
+                self::executeCommand($io, $baseDir, "{$pnpmHome}/bin/pnpm ci");
+            }
         }
         @unlink($baseDir . '/__Did_you_run_composer_update.txt');
 

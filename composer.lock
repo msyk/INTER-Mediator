@@ -80,16 +80,16 @@
         },
         {
             "name": "async-aws/ses",
-            "version": "1.14.2",
+            "version": "1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/ses.git",
-                "reference": "ab3bceb3380e971a5619fbd27d921a5352e644f4"
+                "reference": "4d0d4b6b58b41b6b56d032a72a1e3caf5fe45c9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/ses/zipball/ab3bceb3380e971a5619fbd27d921a5352e644f4",
-                "reference": "ab3bceb3380e971a5619fbd27d921a5352e644f4",
+                "url": "https://api.github.com/repos/async-aws/ses/zipball/4d0d4b6b58b41b6b56d032a72a1e3caf5fe45c9e",
+                "reference": "4d0d4b6b58b41b6b56d032a72a1e3caf5fe45c9e",
                 "shasum": ""
             },
             "require": {
@@ -104,7 +104,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.14-dev"
+                    "dev-master": "1.15-dev"
                 }
             },
             "autoload": {
@@ -125,7 +125,7 @@
                 "ses"
             ],
             "support": {
-                "source": "https://github.com/async-aws/ses/tree/1.14.2"
+                "source": "https://github.com/async-aws/ses/tree/1.15.0"
             },
             "funding": [
                 {
@@ -137,7 +137,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-18T17:06:10+00:00"
+            "time": "2026-06-02T06:51:56+00:00"
         },
         {
             "name": "aws/aws-crt-php",
@@ -195,16 +195,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.383.1",
+            "version": "3.383.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "56b7ff3ff9e086eb3945bf31e75c97cde5ab531a"
+                "reference": "11c2de39e4511dc99e44f049c7dfc8087e051867"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/56b7ff3ff9e086eb3945bf31e75c97cde5ab531a",
-                "reference": "56b7ff3ff9e086eb3945bf31e75c97cde5ab531a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/11c2de39e4511dc99e44f049c7dfc8087e051867",
+                "reference": "11c2de39e4511dc99e44f049c7dfc8087e051867",
                 "shasum": ""
             },
             "require": {
@@ -286,9 +286,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.383.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.383.2"
             },
-            "time": "2026-05-29T18:13:12+00:00"
+            "time": "2026-06-01T18:08:21+00:00"
         },
         {
             "name": "brick/math",
@@ -890,16 +890,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.10.5",
+            "version": "7.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "7c8d84b39e680315f687e8662a9d6fb0865c5148"
+                "reference": "e7412b3180912c01650cc66647f18c1d1cbe9b94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/7c8d84b39e680315f687e8662a9d6fb0865c5148",
-                "reference": "7c8d84b39e680315f687e8662a9d6fb0865c5148",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/e7412b3180912c01650cc66647f18c1d1cbe9b94",
+                "reference": "e7412b3180912c01650cc66647f18c1d1cbe9b94",
                 "shasum": ""
             },
             "require": {
@@ -997,7 +997,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.10.5"
+                "source": "https://github.com/guzzle/guzzle/tree/7.10.6"
             },
             "funding": [
                 {
@@ -1013,7 +1013,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-27T11:53:46+00:00"
+            "time": "2026-06-01T13:06:22+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -1217,16 +1217,16 @@
         },
         {
             "name": "inter-mediator/fmdataapi",
-            "version": "36",
+            "version": "37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/msyk/FMDataAPI.git",
-                "reference": "e61f27affdae91852b8c32dcbc033130b5b2720b"
+                "reference": "469188732c8f5f42fab8e24479f464ab2b09b823"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/msyk/FMDataAPI/zipball/e61f27affdae91852b8c32dcbc033130b5b2720b",
-                "reference": "e61f27affdae91852b8c32dcbc033130b5b2720b",
+                "url": "https://api.github.com/repos/msyk/FMDataAPI/zipball/469188732c8f5f42fab8e24479f464ab2b09b823",
+                "reference": "469188732c8f5f42fab8e24479f464ab2b09b823",
                 "shasum": ""
             },
             "require": {
@@ -1237,6 +1237,9 @@
             "require-dev": {
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "*"
+            },
+            "suggest": {
+                "ext-apcu": "Optional: required only by the built-in ApcuSessionCache backend."
             },
             "type": "library",
             "autoload": {
@@ -1315,7 +1318,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-03T00:00:00+00:00"
+            "time": "2026-05-31T00:00:00+00:00"
         },
         {
             "name": "league/csv",
@@ -2988,16 +2991,16 @@
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v2.5.1",
+            "version": "v2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/simplesamlphp.git",
-                "reference": "c9b881aecb2bbfa2af31d5fa92f45f9d12ad9002"
+                "reference": "593b7f3bc80626470893dd242559e06a5c63ea8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/c9b881aecb2bbfa2af31d5fa92f45f9d12ad9002",
-                "reference": "c9b881aecb2bbfa2af31d5fa92f45f9d12ad9002",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/593b7f3bc80626470893dd242559e06a5c63ea8f",
+                "reference": "593b7f3bc80626470893dd242559e06a5c63ea8f",
                 "shasum": ""
             },
             "require": {
@@ -3020,7 +3023,7 @@
                 "gettext/php-scanner": "^2.0",
                 "gettext/translator": "~1.2",
                 "php": "^8.3",
-                "phpmailer/phpmailer": "~6.10 || ~7.0",
+                "phpmailer/phpmailer": "~7.0",
                 "psr/event-dispatcher": "~1.0",
                 "psr/log": "~3.0",
                 "robrichards/xmlseclibs": "^3.1.5",
@@ -3077,7 +3080,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.5.x-dev",
-                    "dev-simplesamlphp-2.5": "2.5.x-dev"
+                    "dev-simplesamlphp-2.5": "2.5.x-dev",
+                    "dev-simplesamlphp-2.6": "2.6.x-dev",
+                    "dev-simplesamlphp-3.0": "3.0.x-dev"
                 }
             },
             "autoload": {
@@ -3127,20 +3132,20 @@
                 "issues": "https://github.com/simplesamlphp/simplesamlphp/issues",
                 "source": "https://github.com/simplesamlphp/simplesamlphp"
             },
-            "time": "2026-05-29T19:15:51+00:00"
+            "time": "2026-06-01T16:38:01+00:00"
         },
         {
             "name": "simplesamlphp/simplesamlphp-assets-base",
-            "version": "v2.5.14",
+            "version": "v2.5.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/simplesamlphp-assets-base.git",
-                "reference": "0b9185712983e55ac461dc433172bc8efbbc2782"
+                "reference": "6c65cfe90415e2922a9a2ace2bbb72761525fa35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp-assets-base/zipball/0b9185712983e55ac461dc433172bc8efbbc2782",
-                "reference": "0b9185712983e55ac461dc433172bc8efbbc2782",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp-assets-base/zipball/6c65cfe90415e2922a9a2ace2bbb72761525fa35",
+                "reference": "6c65cfe90415e2922a9a2ace2bbb72761525fa35",
                 "shasum": ""
             },
             "require": {
@@ -3161,9 +3166,9 @@
             "description": "Assets for the SimpleSAMLphp main repository",
             "support": {
                 "issues": "https://github.com/simplesamlphp/simplesamlphp-assets-base/issues",
-                "source": "https://github.com/simplesamlphp/simplesamlphp-assets-base/tree/v2.5.14"
+                "source": "https://github.com/simplesamlphp/simplesamlphp-assets-base/tree/v2.5.15"
             },
-            "time": "2026-03-29T02:09:37+00:00"
+            "time": "2026-05-31T03:32:51+00:00"
         },
         {
             "name": "simplesamlphp/xml-common",
@@ -7950,16 +7955,16 @@
         },
         {
             "name": "web-auth/webauthn-lib",
-            "version": "5.3.4",
+            "version": "5.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/webauthn-lib.git",
-                "reference": "dbb2d7a03db5893da2ef1f2898063ab8f7792838"
+                "reference": "9e0986d999f4102e24ac8a598d3a80d98b56c19f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/dbb2d7a03db5893da2ef1f2898063ab8f7792838",
-                "reference": "dbb2d7a03db5893da2ef1f2898063ab8f7792838",
+                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/9e0986d999f4102e24ac8a598d3a80d98b56c19f",
+                "reference": "9e0986d999f4102e24ac8a598d3a80d98b56c19f",
                 "shasum": ""
             },
             "require": {
@@ -8020,7 +8025,7 @@
                 "webauthn"
             ],
             "support": {
-                "source": "https://github.com/web-auth/webauthn-lib/tree/5.3.4"
+                "source": "https://github.com/web-auth/webauthn-lib/tree/5.3.5"
             },
             "funding": [
                 {
@@ -8032,7 +8037,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-05-18T11:59:46+00:00"
+            "time": "2026-05-31T15:00:08+00:00"
         },
         {
             "name": "web-token/jwt-framework",
