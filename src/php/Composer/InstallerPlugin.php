@@ -60,7 +60,7 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
      */
     public static function onPostInstallCmd(Event $event): void
     {
-        self::runPostInstallTasks($event);
+        self::runPostInstallTasks($event, false);
     }
 
     /**
@@ -68,13 +68,16 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
      */
     public static function onPostUpdateCmd(Event $event): void
     {
-        self::runPostInstallTasks($event);
+        self::runPostInstallTasks($event, true);
     }
 
     /**
      * Execute the post-install/update tasks.
+     *
+     * @param bool $isUpdate True when called after "composer update",
+     *                       false when called after "composer install".
      */
-    protected static function runPostInstallTasks(Event $event): void
+    protected static function runPostInstallTasks(Event $event, bool $isUpdate): void
     {
         $composer = $event->getComposer();
         $io = $event->getIO();
@@ -99,6 +102,10 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
                 self::executeCommand($io, $baseDir, "cd ./vendor/inter-mediator/inter-mediator; {$pnpmHome}/bin/pnpm ci");
                 self::executeCommand($io, $baseDir, "./vendor/inter-mediator/inter-mediator/dist-docs/generateminifyjshere.sh");
             }
+
+            // As the final step, run the root project's post-install/update
+            // hook script if it provides one (dependency mode only).
+            self::runAfterScript($io, $baseDir, $isUpdate);
         } else {
             // INTER-Mediator is the root project (e.g., git clone + composer install).
             $io->write('<info>INTER-Mediator: Running post-install tasks (root project mode)...</info>');
@@ -129,6 +136,36 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
     protected static function isInstalledAsDependency(Composer $composer): bool
     {
         return $composer->getPackage()->getName() !== self::PACKAGE_NAME;
+    }
+
+    /**
+     * Run the root project's post-install/update hook script as the final
+     * step, if it exists.
+     *
+     * When INTER-Mediator is installed as a dependency, the root project may
+     * provide "lib/doafterinstall.sh" (executed after "composer install") or
+     * "lib/doafterupdate.sh" (executed after "composer update"). On Windows,
+     * the corresponding "lib/doafterinstall.ps1" / "lib/doafterupdate.ps1"
+     * files are used instead. If the script file does not exist, it is
+     * silently ignored.
+     */
+    protected static function runAfterScript(IOInterface $io, string $baseDir, bool $isUpdate): void
+    {
+        $scriptBaseName = $isUpdate ? 'doafterupdate' : 'doafterinstall';
+        $isWindows = PHP_OS_FAMILY === 'Windows';
+        $relativePath = 'lib/' . $scriptBaseName . ($isWindows ? '.ps1' : '.sh');
+
+        if (!is_file($baseDir . '/' . $relativePath)) {
+            // No hook script provided by the root project; silently skip.
+            return;
+        }
+
+        if ($isWindows) {
+            self::executeCommand($io, $baseDir,
+                'powershell -NoProfile -ExecutionPolicy Bypass -File ' . $relativePath);
+        } else {
+            self::executeCommand($io, $baseDir, 'sh ' . $relativePath);
+        }
     }
 
     /**
