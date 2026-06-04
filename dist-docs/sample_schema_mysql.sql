@@ -1119,6 +1119,7 @@ CREATE TABLE authfail
     dt       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ip       VARCHAR(39),
     username VARCHAR(64),
+    tw       INT,
     PRIMARY KEY (id)
 ) CHARACTER SET utf8mb4,
   COLLATE utf8mb4_unicode_ci
@@ -1126,8 +1127,8 @@ CREATE TABLE authfail
 
 CREATE INDEX authfail_dt ON authfail (dt);
 CREATE INDEX authfail_ip ON authfail (ip);
+CREATE INDEX authfail_tw ON authfail (tw);
 CREATE INDEX authfail_username ON authfail (username);
-CREATE INDEX authfail_ip_username ON authfail (ip, username);
 
 CREATE TABLE testtable
 (
