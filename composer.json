@@ -82,7 +82,7 @@
       "cd spec/run;npm run wdio"
     ],
     "clear": [
-      "rm -rf node_modules vendor"
+      "INTERMediator\\Composer\\InstallerPlugin::onClear"
     ],
     "post-install-cmd": [
       "INTERMediator\\Composer\\InstallerPlugin::onPostInstallCmd"

@@ -72,6 +72,35 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
+     * Composer script callback for the "clear" script.
+     *
+     * Removes the installed "node_modules" and "vendor" directories using
+     * PHP's filesystem functions, so it works on every platform including
+     * Windows. This replaces the UNIX-only "rm -rf node_modules vendor"
+     * shell command.
+     */
+    public static function onClear(Event $event): void
+    {
+        $composer = $event->getComposer();
+        $io = $event->getIO();
+        $vendorDir = $composer->getConfig()->get('vendor-dir');
+        $baseDir = dirname($vendorDir);
+
+        // node_modules is removed first and vendor last. The vendor directory
+        // holds the Composer autoloader, but this class is loaded from
+        // src/php (already in memory), so removal is safe.
+        $targets = [
+            $baseDir . '/node_modules',
+            $vendorDir,
+        ];
+        foreach ($targets as $target) {
+            if (self::removeDirectory($target)) {
+                $io->write(sprintf('<info>INTER-Mediator: Removed "%s".</info>', $target));
+            }
+        }
+    }
+
+    /**
      * Execute the post-install/update tasks.
      *
      * @param bool $isUpdate True when called after "composer update",
@@ -166,6 +195,46 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
         } else {
             self::executeCommand($io, $baseDir, 'sh ' . $relativePath);
         }
+    }
+
+    /**
+     * Recursively remove a directory and all of its contents.
+     *
+     * Implemented with PHP's filesystem functions so it works on every
+     * platform, including Windows. Symbolic links (such as the many links a
+     * pnpm "node_modules" tree contains) are removed without descending into
+     * their targets. Returns true when the directory existed and was removed;
+     * a non-existent directory is silently ignored.
+     */
+    protected static function removeDirectory(string $path): bool
+    {
+        if (!is_dir($path)) {
+            return false;
+        }
+
+        $items = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST,
+            \RecursiveIteratorIterator::CATCH_GET_CHILD
+        );
+
+        foreach ($items as $item) {
+            $pathname = $item->getPathname();
+            if ($item->isLink()) {
+                // Remove the link itself without following it. A directory
+                // junction/symlink on Windows needs rmdir(), while unlink()
+                // handles every link type on macOS / Linux.
+                if (!@unlink($pathname)) {
+                    @rmdir($pathname);
+                }
+            } elseif ($item->isDir()) {
+                @rmdir($pathname);
+            } else {
+                @unlink($pathname);
+            }
+        }
+
+        return @rmdir($path);
     }
 
     /**
