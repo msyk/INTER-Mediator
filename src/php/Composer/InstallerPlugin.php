@@ -2,7 +2,6 @@
 
 namespace INTERMediator\Composer;
 
-use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
@@ -20,21 +19,21 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
      * post-install/update logic is invoked statically as a Composer script
      * callback as well (Composer scripts cannot call instance methods).
      */
-    public function activate(Composer $composer, IOInterface $io): void
+    public function activate(\Composer\Composer $composer, IOInterface $io): void
     {
     }
 
     /**
      * Remove any hooks from Composer.
      */
-    public function deactivate(Composer $composer, IOInterface $io): void
+    public function deactivate(\Composer\Composer $composer, IOInterface $io): void
     {
     }
 
     /**
      * Prepare the plugin to be uninstalled.
      */
-    public function uninstall(Composer $composer, IOInterface $io): void
+    public function uninstall(\Composer\Composer $composer, IOInterface $io): void
     {
     }
 
@@ -112,10 +111,11 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
         $io = $event->getIO();
         $vendorDir = $composer->getConfig()->get('vendor-dir');
         $baseDir = dirname($vendorDir);
+        $taskMessage = $isUpdate ? 'update' : 'install';
 
         if (self::isInstalledAsDependency($composer)) {
             // INTER-Mediator was installed as a dependency via "composer require".
-            $io->write('<info>INTER-Mediator: Running post-install tasks (dependency mode)...</info>');
+            $io->write("<info>INTER-Mediator: Running post-{$taskMessage} tasks (dependency mode)...</info>");
             if (PHP_OS_FAMILY === 'Windows') {
                 // Windows: install pnpm via PowerShell
                 self::executeCommand($io, $baseDir, 'powershell -NoProfile -ExecutionPolicy Bypass -Command '
@@ -137,7 +137,7 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
             self::runAfterScript($io, $baseDir, $isUpdate);
         } else {
             // INTER-Mediator is the root project (e.g., git clone + composer install).
-            $io->write('<info>INTER-Mediator: Running post-install tasks (root project mode)...</info>');
+            $io->write("<info>INTER-Mediator: Running post-{$taskMessage} tasks (root project mode)...</info>");
             if (PHP_OS_FAMILY === 'Windows') {
                 // Windows: install pnpm via PowerShell
                 self::executeCommand($io, $baseDir, 'powershell -NoProfile -ExecutionPolicy Bypass -Command '
@@ -162,7 +162,7 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
      * Determine whether INTER-Mediator is installed as a Composer dependency
      * (true) or is being used as the root project (false).
      */
-    protected static function isInstalledAsDependency(Composer $composer): bool
+    protected static function isInstalledAsDependency(\Composer\Composer $composer): bool
     {
         return $composer->getPackage()->getName() !== self::PACKAGE_NAME;
     }
@@ -177,6 +177,9 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
      * the corresponding "lib/doafterinstall.ps1" / "lib/doafterupdate.ps1"
      * files are used instead. If the script file does not exist, it is
      * silently ignored.
+     * @param IOInterface $io
+     * @param string $baseDir
+     * @param bool $isUpdate
      */
     protected static function runAfterScript(IOInterface $io, string $baseDir, bool $isUpdate): void
     {
@@ -189,11 +192,13 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
             return;
         }
 
+        // Run interactively so a script that prompts for keyboard input
+        // (e.g. via "read") can receive it and show its prompt in real time.
         if ($isWindows) {
             self::executeCommand($io, $baseDir,
-                'powershell -NoProfile -ExecutionPolicy Bypass -File ' . $relativePath);
+                'powershell -NoProfile -ExecutionPolicy Bypass -File ' . $relativePath, true);
         } else {
-            self::executeCommand($io, $baseDir, 'sh ' . $relativePath);
+            self::executeCommand($io, $baseDir, 'sh ' . $relativePath, true);
         }
     }
 
@@ -239,10 +244,29 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
 
     /**
      * Execute a shell command in the given directory.
+     *
+     * When $interactive is true the child process inherits this process's
+     * STDIN/STDOUT/STDERR, so commands that prompt for keyboard input (such
+     * as a "read" in a shell script) work and their output is shown live.
+     * Otherwise the output is captured and printed after the command ends.
      */
-    protected static function executeCommand(IOInterface $io, string $cwd, string $command): int
+    protected static function executeCommand(IOInterface $io, string $cwd, string $command, bool $interactive = false): int
     {
         $io->write(sprintf('  > %s', $command));
+
+        if ($interactive) {
+            // Inherit the parent process's standard streams so the command can
+            // read keyboard input (e.g. a script's "read" prompt) and write
+            // its output in real time, instead of capturing them through pipes.
+            $process = proc_open($command, [0 => STDIN, 1 => STDOUT, 2 => STDERR], $pipes, $cwd);
+
+            if (!is_resource($process)) {
+                $io->writeError(sprintf('<error>Failed to execute: %s</error>', $command));
+                return 1;
+            }
+
+            return proc_close($process);
+        }
 
         $process = proc_open(
             $command,
