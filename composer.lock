@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d35681fd25298b9ff37a71e4cbff85a5",
+    "content-hash": "fd899f0d781fdf7d25bf7c27e684b2ab",
     "packages": [
         {
             "name": "async-aws/core",
@@ -195,16 +195,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.384.2",
+            "version": "3.384.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "a6c85b3a1f5f8327076291040329214b3a2caf2b"
+                "reference": "9d3538b3f113cd66b3220f7e37e3d0ff1e0713e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a6c85b3a1f5f8327076291040329214b3a2caf2b",
-                "reference": "a6c85b3a1f5f8327076291040329214b3a2caf2b",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9d3538b3f113cd66b3220f7e37e3d0ff1e0713e7",
+                "reference": "9d3538b3f113cd66b3220f7e37e3d0ff1e0713e7",
                 "shasum": ""
             },
             "require": {
@@ -286,9 +286,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.384.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.384.3"
             },
-            "time": "2026-06-03T18:07:33+00:00"
+            "time": "2026-06-04T18:11:21+00:00"
         },
         {
             "name": "brick/math",
@@ -8455,16 +8455,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.10.0",
+            "version": "2.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "c13824d95608b15913a7c0def0a3dea4474b71fc"
+                "reference": "4120703b9bda8795075047b40361d7ec4d2abe49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/c13824d95608b15913a7c0def0a3dea4474b71fc",
-                "reference": "c13824d95608b15913a7c0def0a3dea4474b71fc",
+                "url": "https://api.github.com/repos/composer/composer/zipball/4120703b9bda8795075047b40361d7ec4d2abe49",
+                "reference": "4120703b9bda8795075047b40361d7ec4d2abe49",
                 "shasum": ""
             },
             "require": {
@@ -8552,7 +8552,7 @@
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
                 "security": "https://github.com/composer/composer/security/policy",
-                "source": "https://github.com/composer/composer/tree/2.10.0"
+                "source": "https://github.com/composer/composer/tree/2.10.1"
             },
             "funding": [
                 {
@@ -8564,7 +8564,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-28T09:22:08+00:00"
+            "time": "2026-06-04T08:25:59+00:00"
         },
         {
             "name": "composer/metadata-minifier",

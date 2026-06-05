@@ -1,7 +1,7 @@
 {
   "name": "inter-mediator/inter-mediator",
-  "version": "15",
-  "time": "2026-05-10",
+  "version": "16",
+  "time": "2026-06-05",
   "minimum-stability": "stable",
   "prefer-stable": true,
   "require": {
@@ -68,7 +68,9 @@
     "manual": "https://inter-mediator.info/"
   },
   "scripts": {
-    "phpstan": "./vendor/bin/phpstan analyse -c ./spec/phpstan.neon  --memory-limit=2048M",
+    "phpstan": [
+      "./vendor/bin/phpstan analyse -c ./spec/phpstan.neon  --memory-limit=2048M"
+    ],
     "test": [
       "./vendor/bin/phpunit --bootstrap ./vendor/autoload.php --configuration ./spec/INTER-Mediator-UnitTest/phpunit.xml"
     ],
@@ -84,6 +86,9 @@
     "clear": [
       "INTERMediator\\Composer\\InstallerPlugin::onClear"
     ],
+    "clean": [
+      "INTERMediator\\Composer\\InstallerPlugin::onClear"
+    ],
     "post-install-cmd": [
       "INTERMediator\\Composer\\InstallerPlugin::onPostInstallCmd"
     ],
@@ -94,7 +99,6 @@
   "config": {
     "allow-plugins": {
       "simplesamlphp/composer-module-installer": true,
-      "mouf/nodejs-installer": true,
       "simplesamlphp/composer-xmlprovider-installer": true,
       "inter-mediator/inter-mediator": true
     }
