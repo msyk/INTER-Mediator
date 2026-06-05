@@ -14,6 +14,7 @@ echo "Target Directory: $(pwd)"
 echo "******************************************************"
 mv '__Did_you_run_composer_update.txt' spec/tempfile
 composer update
+pnpm clean --lockfile
 pnpm install --lockfile-only
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 export PATH="$SCRIPT_DIR/../vendor/bin:$PATH"
@@ -25,6 +26,7 @@ echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
+pnpm clean --lockfile
 pnpm install --lockfile-only
 rm package-lock.json
 
@@ -33,6 +35,7 @@ echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
+pnpm clean --lockfile
 pnpm install --lockfile-only
 rm package-lock.json
 
@@ -41,6 +44,7 @@ echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
+pnpm clean --lockfile
 pnpm install --lockfile-only
 rm package-lock.json
 

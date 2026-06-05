@@ -1,6 +1,4 @@
-allowBuilds:
-  core-js: true
-  unrs-resolver: true
+#allowBuilds:
+#  core-js: true
+#  unrs-resolver: true
 minimumReleaseAge: 10080
-minimumReleaseAgeExclude:
-  - pnpm@11.4.0

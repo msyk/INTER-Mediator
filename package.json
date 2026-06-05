@@ -35,13 +35,8 @@
       "name": "Miyuki Imaizumi"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/INTER-Mediator/INTER-Mediator.git"
-  },
   "scripts": {
-    "test": "cd node_modules/.bin; jest --config ../../spec/jest.config.js",
-    "postinstall": "npmpd"
+    "test": "cd node_modules/.bin; jest --config ../../spec/jest.config.js"
   },
   "devDependencies": {
     "jest": "30.3.0",
@@ -71,13 +66,10 @@
     "inter-mediator-plugin-qrcode": "1.1.0",
     "inter-mediator-queue": "1.0.9",
     "jssha": "3.3.1",
+    "node": "^24.16.0",
     "nodemon": "3.1.14",
-    "node": "*",
     "socket.io": "4.8.3",
     "socket.io-client": "4.8.3"
-  },
-  "win32Dependencies": {
-    "forever-win": "*"
   },
   "engines": {
     "node": "*"
