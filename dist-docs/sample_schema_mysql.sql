@@ -788,7 +788,7 @@ CREATE TABLE registeredpks
 CREATE TABLE authuser
 (
     id                    INT AUTO_INCREMENT, # Primary key field for this table
-    username              VARCHAR(100),       # The username which user enters, This should be unique
+    username              VARCHAR(100),       # The username that user enters, This should be unique
     hashedpasswd          VARCHAR(72),        # The hash of password
     realname              VARCHAR(100),       # The real name
     email                 VARCHAR(100),       # The email address
@@ -802,6 +802,7 @@ CREATE TABLE authuser
     publicKeyCredentialId TEXT,               # For Passkey Authentication
     secret                TEXT,               # For Google Authenticator
     accessToken           VARCHAR(64),        # For API, the length depends on your implementation.
+    inactive              BOOLEAN,            # Inhibit to log in.
     PRIMARY KEY (id)
 ) CHARACTER SET utf8mb4,
   COLLATE utf8mb4_unicode_ci

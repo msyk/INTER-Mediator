@@ -466,7 +466,8 @@ CREATE TABLE authuser
     publicKey             TEXT,
     publicKeyCredentialId TEXT,
     secret                TEXT,
-    accessToken           VARCHAR(64)
+    accessToken           VARCHAR(64),
+    inactive              BOOLEAN
 );
 CREATE INDEX authuser_username ON authuser (username);
 CREATE INDEX authuser_email ON authuser (email);

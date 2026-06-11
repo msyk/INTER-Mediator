@@ -432,7 +432,8 @@ CREATE TABLE authuser
     publicKey       TEXT,
     publicKeyCredentialId TEXT,
     secret                TEXT,
-    accessToken  TEXT
+    accessToken  TEXT,
+    inactive              BOOLEAN
 );
 
 CREATE INDEX authuser_username
@@ -642,7 +643,8 @@ CREATE TABLE authfail
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
     dt       TIMESTAMP DEFAULT (datetime('now', 'localtime')),
     ip       TEXT,
-    username TEXT
+    username TEXT,
+    tw       INTEGER
 );
 CREATE INDEX authfail_dt ON authfail (dt);
 CREATE INDEX authfail_ip ON authfail (ip);
