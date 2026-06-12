@@ -16,6 +16,7 @@ mv '__Did_you_run_composer_update.txt' spec/tempfile
 composer update
 pnpm clean --lockfile
 npm_config_prefer_online=true pnpm install --lockfile-only
+pnpm install --frozen-lockfile
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 export PATH="$SCRIPT_DIR/../vendor/bin:$PATH"
 mv spec/tempfile '__Did_you_run_composer_update.txt'
