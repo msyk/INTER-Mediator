@@ -29,7 +29,6 @@ echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
 pnpm clean --lockfile
 pm_config_prefer_online=true pnpm install --lockfile-only
-rm package-lock.json
 
 cd ../run_v8
 echo "******************************************************"
@@ -38,7 +37,6 @@ echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
 pnpm clean --lockfile
 pm_config_prefer_online=true pnpm install --lockfile-only
-rm package-lock.json
 
 cd ../run-safari
 echo "******************************************************"
@@ -47,7 +45,6 @@ echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
 pnpm clean --lockfile
 pm_config_prefer_online=true pnpm install --lockfile-only
-rm package-lock.json
 
 # brew unlink php@7.4
 # brew link php
