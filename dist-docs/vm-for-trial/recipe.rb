@@ -1337,8 +1337,8 @@ execute "n lts" do
   command "n lts"
 end
 
-execute "su - developer -c 'pnpm ci'" do
-  command "su - developer -c 'pnpm ci'"
+execute "su - developer -c 'cd \"#{IMROOT}\" && pnpm ci'" do
+  command "su - developer -c 'cd \"#{IMROOT}\" && pnpm ci'"
 end
 
 # Install npm packages
