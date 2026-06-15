@@ -1326,7 +1326,7 @@ end
 # pnpm install
 
 execute "npm install -g pnpm n" do
-  command "npm install -g pnpm"
+  command "npm install -g pnpm n"
   command "n lts"
 end
 
