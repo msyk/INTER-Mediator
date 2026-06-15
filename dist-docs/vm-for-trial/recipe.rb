@@ -1325,18 +1325,13 @@ end
 
 # pnpm install
 
-execute "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | ENV=\"$HOME/.shrc\" SHELL=\"$(which sh)\" sh -'" do
-  command "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | ENV=\"$HOME/.shrc\" SHELL=\"$(which sh)\" sh -'"
+execute "npm install -g pnpm" do
+  command "npm install -g pnpm"
 end
 
-execute 'chmod a+x /home/developer/.local/share/pnpm/bin/pnpm' do
-  command 'chmod a+x /home/developer/.local/share/pnpm/bin/pnpm'
+execute "su - developer -c 'pnpm cd'" do
+  command "su - developer -c 'pnpm cd'"
 end
-
-execute "su - developer -c \". /home/developer/.local/share/pnpm/bin/pnpm ci\"" do
-  command "su - developer -c \". /home/developer/.local/share/pnpm/bin/pnpm ci\""
-end
-
 
 # Install npm packages
 
