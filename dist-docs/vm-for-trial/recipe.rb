@@ -1329,8 +1329,8 @@ execute "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | ENV=\"$H
   command "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | ENV=\"$HOME/.shrc\" SHELL=\"$(which sh)\" sh -'"
 end
 
-execute "su - developer -c \"source ${HOME}/.local/share/pnpm/bin/pnpm\" ci" do
-  command "su - developer -c \"source ${HOME}/.local/share/pnpm/bin/pnpm\" ci"
+execute "su - developer -c \". ${HOME}/.local/share/pnpm/bin/pnpm ci\"" do
+  command "su - developer -c \". ${HOME}/.local/share/pnpm/bin/pnpm ci\""
 end
 
 
