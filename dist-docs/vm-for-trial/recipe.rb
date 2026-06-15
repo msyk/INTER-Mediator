@@ -1329,12 +1329,12 @@ execute "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | ENV=\"$H
   command "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | ENV=\"$HOME/.shrc\" SHELL=\"$(which sh)\" sh -'"
 end
 
-execute 'chmod a+x ${HOME}/.local/share/pnpm/bin/pnpm' do
-  command 'chmod a+x ${HOME}/.local/share/pnpm/bin/pnpm'
+execute 'chmod a+x /home/developer/.local/share/pnpm/bin/pnpm' do
+  command 'chmod a+x /home/developer/.local/share/pnpm/bin/pnpm'
 end
 
-execute "su - developer -c \". ${HOME}/.local/share/pnpm/bin/pnpm ci\"" do
-  command "su - developer -c \". ${HOME}/.local/share/pnpm/bin/pnpm ci\""
+execute "su - developer -c \". /home/developer/.local/share/pnpm/bin/pnpm ci\"" do
+  command "su - developer -c \". /home/developer/.local/share/pnpm/bin/pnpm ci\""
 end
 
 
