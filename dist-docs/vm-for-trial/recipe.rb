@@ -1325,8 +1325,8 @@ end
 
 # pnpm install
 
-execute "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | sh -'" do
-  command "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | sh -'"
+execute "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | ENV=\"$HOME/.shrc\" SHELL=\"$(which sh)\" sh -'" do
+  command "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | ENV=\"$HOME/.shrc\" SHELL=\"$(which sh)\" sh -'"
 end
 
 execute "su - developer -c 'pnpm ci'" do
