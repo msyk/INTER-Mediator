@@ -1325,12 +1325,13 @@ end
 
 # pnpm install
 
-execute "npm install -g pnpm" do
+execute "npm install -g pnpm n" do
   command "npm install -g pnpm"
+  command "n lts"
 end
 
-execute "su - developer -c 'pnpm cd'" do
-  command "su - developer -c 'pnpm cd'"
+execute "su - developer -c 'pnpm ci'" do
+  command "su - developer -c 'pnpm ci'"
 end
 
 # Install npm packages
