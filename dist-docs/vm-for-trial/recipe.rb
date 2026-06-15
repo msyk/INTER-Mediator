@@ -1319,9 +1319,20 @@ if node[:platform] == 'redhat' && node[:platform_version].to_f >= 7 && node[:pla
   end
 end
 
-execute "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer update'" do
-  command "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer update'"
+execute "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer update --no-scripts'" do
+  command "su - developer -c 'cd \"#{IMROOT}\" && /usr/local/bin/composer update --no-scripts'"
 end
+
+# pnpm install
+
+execute "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | sh -'" do
+  command "su - developer -c 'curl -fsSL https://get.pnpm.io/install.sh | sh -'"
+end
+
+execute "su - developer -c 'pnpm ci'" do
+  command "su - developer -c 'pnpm ci'"
+end
+
 
 # Install npm packages
 
