@@ -199,7 +199,8 @@ module.exports = (AuthPage, is2FA = false) => {
           await browser.pause(waiting)
           await expect(AuthPage.auth2FAPanel).not.toExist()
         }
-        await browser.refresh()
+        // await browser.refresh()
+        await browser.url(await browser.getUrl()); // instead of refresh for stability
         await browser.pause(waiting)
         await expect(AuthPage.auth2FAPanel).not.toExist()
         await expect(AuthPage.authPanel).not.toExist() // Still logging in
