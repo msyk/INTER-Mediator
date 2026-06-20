@@ -172,6 +172,9 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
                     self::executeCommand($io, $baseDir, 'powershell -NoProfile -ExecutionPolicy Bypass -Command '
                         . '"& \'' . $psScriptPath . '\'; pnpm ci"'
                     );
+                    self::executeCommand($io, $baseDir, 'powershell -NoProfile -ExecutionPolicy Bypass -File '
+                        . '"./vendor/inter-mediator/inter-mediator/dist-docs/generateminifyjshere.ps1"'
+                    );
                 } else {
                     // macOS / Linux: download, verify the checksum, then run the pnpm installer.
                     $scriptPath = self::downloadVerifiedPnpmInstaller($io, false);
