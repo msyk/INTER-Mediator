@@ -28,7 +28,7 @@ echo "Target Directory: $(pwd)"
 echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
 pnpm clean --lockfile
-pm_config_prefer_online=true pnpm install --lockfile-only
+npm_config_prefer_online=true pnpm install --lockfile-only
 
 cd ../run_v8
 echo "******************************************************"
@@ -36,7 +36,7 @@ echo "Target Directory: $(pwd)"
 echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
 pnpm clean --lockfile
-pm_config_prefer_online=true pnpm install --lockfile-only
+npm_config_prefer_online=true pnpm install --lockfile-only
 
 cd ../run-safari
 echo "******************************************************"
@@ -44,7 +44,7 @@ echo "Target Directory: $(pwd)"
 echo "******************************************************"
 #../../node_modules/.bin/pnpm install --frozen-lockfile
 pnpm clean --lockfile
-pm_config_prefer_online=true pnpm install --lockfile-only
+npm_config_prefer_online=true pnpm install --lockfile-only
 
 # brew unlink php@7.4
 # brew link php
