@@ -364,11 +364,11 @@ class Settings
     }
 
     /** Set attached files for a context.
-     * @param string $contextName The context name.
+     * @param string|null $contextName The context name.
      * @param array $files Array of attached files.
      * @return void
      */
-    public function setAttachedFiles(string $contextName, array $files): void
+    public function setAttachedFiles(string|null $contextName, array $files): void
     {
         if ($contextName && count($files) > 0) {
             $this->attachedFiles[$contextName] = $files;

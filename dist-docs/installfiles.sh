@@ -14,27 +14,37 @@ echo "Target Directory: $(pwd)"
 echo "******************************************************"
 mv '__Did_you_run_composer_update.txt' spec/tempfile
 composer update
+pnpm clean --lockfile
+npm_config_prefer_online=true pnpm install --lockfile-only
+pnpm install --frozen-lockfile
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 export PATH="$SCRIPT_DIR/../vendor/bin:$PATH"
 mv spec/tempfile '__Did_you_run_composer_update.txt'
+rm package-lock.json
 
 cd spec/run
 echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
-../../node_modules/.bin/pnpm install --frozen-lockfile
+#../../node_modules/.bin/pnpm install --frozen-lockfile
+pnpm clean --lockfile
+npm_config_prefer_online=true pnpm install --lockfile-only
 
 cd ../run_v8
 echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
-../../node_modules/.bin/pnpm install --frozen-lockfile
+#../../node_modules/.bin/pnpm install --frozen-lockfile
+pnpm clean --lockfile
+npm_config_prefer_online=true pnpm install --lockfile-only
 
 cd ../run-safari
 echo "******************************************************"
 echo "Target Directory: $(pwd)"
 echo "******************************************************"
-../../node_modules/.bin/pnpm install --frozen-lockfile
+#../../node_modules/.bin/pnpm install --frozen-lockfile
+pnpm clean --lockfile
+npm_config_prefer_online=true pnpm install --lockfile-only
 
 # brew unlink php@7.4
 # brew link php

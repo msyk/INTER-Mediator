@@ -1,4 +1,7 @@
 allowBuilds:
   core-js: true
+  node: true
   unrs-resolver: true
 minimumReleaseAge: 10080
+ignoredOptionalDependencies:
+  - '@unrs/resolver-binding-wasm32-wasi'
