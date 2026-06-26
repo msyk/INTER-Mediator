@@ -25,8 +25,9 @@ for ver in "${versionArray[@]}"; do
     git push origin --delete "Ver.${baseVersion}-PHP${ver}"
     git push origin "Ver.${baseVersion}-PHP${ver}"
     git push origin --delete "${baseVersion}-${ver}"
-    git push origin "${baseVersion}-${ver}"
+#    git push origin "${baseVersion}-${ver}"
 done
+git push origin --tags
 git checkout master
 
 exit

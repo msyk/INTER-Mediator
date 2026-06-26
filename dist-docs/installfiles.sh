@@ -44,10 +44,6 @@ for ver in "${versionArray[@]}"; do
 done
 rm composer.phar composer-setup.php
 
-exit
-
-
-
 cd spec/run
 echo "******************************************************"
 echo "Target Directory: $(pwd)"
