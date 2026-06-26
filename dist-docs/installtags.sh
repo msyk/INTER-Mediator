@@ -2,75 +2,31 @@
 
 distDocDir=$(cd $(dirname "$0"); pwd)
 seedComposer="${distDocDir}/composer-seed/composer-"
+baseVersion="16"
 versions="8.1,8.2,8.3,8.4,8.5"
-composerVers="2.7,2.7,2.7,2.8,2.10"
 originalPath=$(dirname "${distDocDir}")
 cd "${originalPath}"
 
-
-# rm -rf vendor node_modules
-
-echo "******************************************************"
-echo "Target Directory: $(pwd)"
-echo "******************************************************"
-mv '__Did_you_run_composer_update.txt' spec/tempfile
-#composer update
-pnpm clean --lockfile
-npm_config_prefer_online=true pnpm install --lockfile-only
-pnpm install --frozen-lockfile
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-export PATH="$SCRIPT_DIR/../vendor/bin:$PATH"
-mv spec/tempfile '__Did_you_run_composer_update.txt'
-rm package-lock.json
-
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-
-IFS=',' read -ra cvArray <<< "$composerVers"
 IFS=',' read -ra versionArray <<< "$versions"
-COUNT=0
 for ver in "${versionArray[@]}"; do
-    brew unlink php
-    brew link "php@${ver}"
-
+    echo "======\nProcessing ${baseVersion}-${ver}"
+    git checkout master
     rm composer.json composer.lock
-
-    echo "Setup composer ver.${cvArray[${COUNT}]}"
-    php composer-setup.php --"${cvArray[${COUNT}]}"
-
-    cp "${seedComposer}${ver}.json" "${originalPath}/composer.json"
-    php composer.phar update --no-scripts --no-plugins --no-interaction
-    cp -f "composer.lock" "${seedComposer}${ver}.lock"
-    ((COUNT++))
+    cp -f "${seedComposer}${ver}.json" "${originalPath}/composer.json"
+    cp -f "${seedComposer}${ver}.lock" "${originalPath}/composer.lock"
+    git branch -D "Ver.${baseVersion}-PHP${ver}"
+    git branch "Ver.${baseVersion}-PHP${ver}"
+    git checkout "Ver.${baseVersion}-PHP${ver}"
+    git add composer.json composer.lock
+    git commit -m "Update composer.json and composer.lock for PHP ${ver}"
+    git push origin "Ver.${baseVersion}-PHP${ver}"
+    git tag -d "${baseVersion}-${ver}"
+    git tag "${baseVersion}-${ver}"
+    git push origin --delete "Ver.${baseVersion}-PHP${ver}"
+    git push origin "Ver.${baseVersion}-PHP${ver}"
+    git push origin --delete "${baseVersion}-${ver}"
+    git push origin "${baseVersion}-${ver}"
 done
-rm composer.phar composer-setup.php
+git checkout master
 
 exit
-
-
-
-cd spec/run
-echo "******************************************************"
-echo "Target Directory: $(pwd)"
-echo "******************************************************"
-#../../node_modules/.bin/pnpm install --frozen-lockfile
-pnpm clean --lockfile
-npm_config_prefer_online=true pnpm install --lockfile-only
-
-cd ../run_v8
-echo "******************************************************"
-echo "Target Directory: $(pwd)"
-echo "******************************************************"
-#../../node_modules/.bin/pnpm install --frozen-lockfile
-pnpm clean --lockfile
-npm_config_prefer_online=true pnpm install --lockfile-only
-
-cd ../run-safari
-echo "******************************************************"
-echo "Target Directory: $(pwd)"
-echo "******************************************************"
-#../../node_modules/.bin/pnpm install --frozen-lockfile
-pnpm clean --lockfile
-npm_config_prefer_online=true pnpm install --lockfile-only
-
-# brew unlink php@7.4
-# brew link php
