@@ -23,6 +23,7 @@ for ver in "${versionArray[@]}"; do
     git tag -d "${baseVersion}-${ver}"
     git tag "${baseVersion}-${ver}"
     git push origin --delete "Ver.${baseVersion}-PHP${ver}"
+    git push pull "Ver.${baseVersion}-PHP${ver}"
     git push origin "Ver.${baseVersion}-PHP${ver}"
     git push origin --delete "${baseVersion}-${ver}"
 #    git push origin "${baseVersion}-${ver}"
