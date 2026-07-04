@@ -254,6 +254,8 @@ $checkUsername = false; // Whether to also consider the username when counting a
 $checkNullUser = false; // Counting falsy username or not..
 $authFailSeconds = 60; // How many seconds back from now to count failures when determining whether to block authentication.
 
+$inactivatingOnFails = false; // false means no inactivating on fails. An integer value means the number of authentication failures before inactivating.
+
 /* Service Server Behavior
  * ===================
  * Port number and host name for service server */

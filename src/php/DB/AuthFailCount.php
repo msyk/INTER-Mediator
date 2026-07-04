@@ -34,6 +34,9 @@ class AuthFailCount
     /** @var int The time window in seconds to look back when counting failures.
      */
     private int $seconds;
+
+    private bool|int $inactivatingOnFails;
+
     /** @var Auth_Interface_CommonDB The authentication handler for database operations.
      */
     private Auth_Interface_CommonDB $authHandler;
@@ -49,15 +52,21 @@ class AuthFailCount
         $this->checkUsername = Params::getParameterValue("checkUsername", false);
         $this->checkNullUser = Params::getParameterValue("checkNullUser", false);
         $this->seconds = Params::getParameterValue("authFailSeconds", 60);
+        $this->inactivatingOnFails = Params::getParameterValue('inactivatingOnFails', false);
         $this->authHandler = $authHandler;
     }
 
     /** Checks whether the brute-force attack protection feature is enabled.
      * @return bool True if the fail rate threshold is greater than 0, meaning protection is active.
      */
-    public function isActive(): bool
+    public function isActiveBluteForce(): bool
     {
         return $this->failRate > 0;
+    }
+
+    public function isActiveInactivating(): bool
+    {
+        return $this->inactivatingOnFails > 0;
     }
 
     /** Determines whether an authentication attempt should be allowed based on a recent failure count.
@@ -65,9 +74,17 @@ class AuthFailCount
      * @param string|null $username The username attempting authentication.
      * @return bool True if the attempt is acceptable (not blocked), false if it should be blocked.
      */
-    public function isAcceptableAuthFail(string $ip, string|null $username = ""): bool
+    public function isAcceptableAuthFailBruteForce(string $ip, string|null $username = ""): bool
     {
-        if ($this->isActive() && $this->failRate < $this->getFailCount($ip, $username)) {
+        if ($this->isActiveBluteForce() && $this->failRate < $this->getFailCount($ip, $username)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isAcceptableAuthInActivating(string $ip, string $username): bool
+    {
+        if ($this->isActiveInactivating() && $this->authHandler < $this->getFailCountInActivating($ip, $username)) {
             return true;
         }
         return false;
@@ -75,13 +92,14 @@ class AuthFailCount
 
     /** Records an authentication failure for the given IP address and username.
      * @param string $ip The client IP address.
-     * @param string $username The username that failed authentication.
+     * @param string|null $username The username that failed authentication.
      * @return void
      */
-    public function addFailRecord(string $ip, string $username): void
+    public function addFailRecord(string $ip, string|null $username): void
     {
-        if ($this->checkNullUser || $username) {
-            $this->authHandler->authSupportAddAuthFail($ip, $username);
+        $this->authHandler->authSupportAddAuthFail($ip, $username);
+        if ($this->isAcceptableAuthInActivating($ip, $username)) {
+            $this->authHandler->authSupportSetInactive($username, true);
         }
     }
 
@@ -94,5 +112,17 @@ class AuthFailCount
     {
         return $this->authHandler->authSupportCheckAuthFailCount(
             $ip, $this->checkUsername ? $username : null, $this->seconds);
+    }
+
+    public function getFailCountInActivating(string $ip, string $username): int
+    {
+        return $this->authHandler->authSupportCheckAuthFailCount($ip, $username, 600);
+    }
+
+    public function getInactive($username): bool{
+        if ($this->isActiveInactivating()) {
+            return $this->authHandler->authSupportIsInactive($username);
+        }
+        return false;
     }
 }
