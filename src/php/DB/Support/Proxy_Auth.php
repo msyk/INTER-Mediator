@@ -143,7 +143,7 @@ trait Proxy_Auth
             }
             // inactivating on fails
             if ($authFail->getInactive($this->paramAuthUser)) {
-                Logger::getInstance()->setWarningMessage(IMUtil::getMessageClassInstance()->getMessageAs(1067));
+                Logger::getInstance()->setWarningMessage(IMUtil::getMessageClassInstance()->getMessageAs(1068));
                 $this->accessSetToNothing();
                 sleep(1);
                 return;

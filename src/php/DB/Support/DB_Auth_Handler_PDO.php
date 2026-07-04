@@ -511,7 +511,7 @@ class DB_Auth_Handler_PDO extends DB_Auth_Common
      */
     public function authTableGetUserIdFromUsername(string $username): string
     {
-        return $this->privateGetUserIdFromUsername($username, false);
+        return $this->privateGetUserIdFromUsername($username, false) ?? "";
     }
 
     /** Gets a user ID from a username.
@@ -1478,7 +1478,8 @@ class DB_Auth_Handler_PDO extends DB_Auth_Common
             if (!$this->pdoDB->setupConnection()) { //Establish the connection
                 throw new Exception("authuser table setting up failed.");
             }
-            $sql = "{$this->pdoDB->handler->sqlSELECTCommand()}inactive FROM {$userTable} WHERE id = " . $authUser;
+            $sql = "{$this->pdoDB->handler->sqlSELECTCommand()}inactive FROM {$userTable} WHERE username = "
+                . $this->pdoDB->link->quote($authUser);
             $result = $this->pdoDB->link->query($sql);
             if ($result === false) {
                 $this->pdoDB->errorMessageStore('ERROR in SELECT:' . $sql);
@@ -1486,11 +1487,12 @@ class DB_Auth_Handler_PDO extends DB_Auth_Common
             }
             $this->logger->setDebugMessage("[authSupportIsInactive] {$sql}", 2);
             foreach ($result->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-                $returnValue = $row['inactive'];
+                $returnValue = boolval($row['inactive']);
             }
         } catch (\Exception $e) {
             $this->pdoDB->errorMessageStore("[authSupportIsInactive] ERROR: {$e->getMessage()}");
         }
+        $this->logger->setDebugMessage("[authSupportIsInactive] returns {$returnValue}", 2);
         return $returnValue;
     }
 
