@@ -15,6 +15,8 @@
 
 namespace INTERMediator\DB\Support;
 
+use Exception;
+
 /**
  * Interface for common database authentication support.
  * Provides methods for handling authorization fields, targets, users, groups,

@@ -99,6 +99,7 @@ jobs:
 
         # E2E test with WebdriverIO
       - name: Setup Firefox
+        id: setup-firefox
         uses: browser-actions/setup-firefox@latest
 
       - name: Install pnpm and setup Takumi Guard
@@ -106,6 +107,22 @@ jobs:
 
       - name: Setup WebdriverIO
         run: cd spec/run; pnpm config list; pnpm install --frozen-lockfile
+
+      - name: Use CI-installed Firefox and install GeckoDriver (avoid wdio auto-download)
+        run: |
+          FIREFOX_BIN="${{ steps.setup-firefox.outputs.firefox-path }}"
+          [ -n "$FIREFOX_BIN" ] || FIREFOX_BIN="$(command -v firefox || true)"
+          echo "firefox: $FIREFOX_BIN"
+          test -x "$FIREFOX_BIN"
+          sudo ln -sf "$FIREFOX_BIN" /usr/local/bin/firefox
+          GECKO_VERSION="$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/mozilla/geckodriver/releases/latest | sed -E 's#.*/tag/v##')"
+          [ -n "$GECKO_VERSION" ] || GECKO_VERSION=0.35.0
+          echo "geckodriver version: $GECKO_VERSION"
+          curl -fsSL -o /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VERSION}/geckodriver-v${GECKO_VERSION}-linux64.tar.gz"
+          sudo tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin geckodriver
+          sudo chmod +x /usr/local/bin/geckodriver
+          echo "GECKODRIVER_PATH=/usr/local/bin/geckodriver" >> "$GITHUB_ENV"
+          /usr/local/bin/geckodriver --version
 
       - name: Boot the web server with php server mode
         run: |

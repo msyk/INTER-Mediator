@@ -305,7 +305,7 @@ class DB_Auth_Handler_FileMaker_DataAPI extends DB_Auth_Common
                 $recordId = $record->getRecordId();
                 $this->fmdb->setupFMDataAPIforAuth($hashTable);
                 try {
-                    $result = $this->fmdb->fmDataAuth->{$hashTable}->delete($recordId);
+                    $this->fmdb->fmDataAuth->{$hashTable}->delete($recordId);
                 } catch (Exception $e) {
                     $this->logger->setDebugMessage(
                         $this->fmdb->stringWithoutCredential(get_class($result) . ': ' .
@@ -1421,24 +1421,24 @@ class DB_Auth_Handler_FileMaker_DataAPI extends DB_Auth_Common
             }
             $result = null;
             try {
-                $result = $this->fmdb->fmData->{$failTable}->query($conditions);
+                $result = $this->fmdb->fmData->{$failTable}->query($conditions);// @phpstan-ignore property.notFound
                 if (!isset($_SESSION['X-FM-Data-Access-Token'])) {
                     $_SESSION['X-FM-Data-Access-Token'] = $this->fmdb->fmData->getSessionToken();
                 }
             } catch (Exception $e) {
                 $this->logger->setDebugMessage(
                     $this->fmdb->stringWithoutCredential(get_class($result) . ': ' .
-                        $this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                        $this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
                 throw new Exception("ERROR in SELECT");
             }
             if (get_class($result) !== 'INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation') {
                 $this->logger->setDebugMessage(
                     $this->fmdb->stringWithoutCredential(get_class($result) . ': ' .
-                        $this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                        $this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
                 throw new Exception("ERROR in SELECT");
             }
             $this->logger->setDebugMessage(
-                $this->fmdb->stringWithoutCredential($this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                $this->fmdb->stringWithoutCredential($this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
             foreach ($result as $record) {
                 $counter++;
             }
@@ -1464,40 +1464,40 @@ class DB_Auth_Handler_FileMaker_DataAPI extends DB_Auth_Common
             $conditions = array(array('dt' => '...' . $oneDayBefore));
             $result = null;
             try {
-                $result = $this->fmdb->fmData->{$failTable}->query($conditions);
+                $result = $this->fmdb->fmData->{$failTable}->query($conditions);// @phpstan-ignore property.notFound
                 if (!isset($_SESSION['X-FM-Data-Access-Token'])) {
                     $_SESSION['X-FM-Data-Access-Token'] = $this->fmdb->fmData->getSessionToken();
                 }
             } catch (Exception $e) {
                 $this->logger->setDebugMessage(
                     $this->fmdb->stringWithoutCredential(get_class($result) . ': ' .
-                        $this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                        $this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
                 throw new Exception("ERROR in SELECT");
             }
             if (get_class($result) !== 'INTERMediator\\FileMakerServer\\RESTAPI\\Supporting\\FileMakerRelation') {
                 $this->logger->setDebugMessage(
                     $this->fmdb->stringWithoutCredential(get_class($result) . ': ' .
-                        $this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                        $this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
                 throw new Exception("ERROR in SELECT");
             }
             $this->logger->setDebugMessage(
-                $this->fmdb->stringWithoutCredential($this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                $this->fmdb->stringWithoutCredential($this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
             foreach ($result as $record) {
                 $recordId = $record->getRecordId();
                 $this->fmdb->setupFMDataAPIforDB($failTable);
                 try {
-                    $this->fmdb->fmData->{$failTable}->delete($recordId);
+                    $this->fmdb->fmData->{$failTable}->delete($recordId);// @phpstan-ignore property.notFound
                 } catch (Exception $e) {
                     $this->logger->setDebugMessage(
                         $this->fmdb->stringWithoutCredential(get_class($result) . ': ' .
-                            $this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                            $this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
                     throw new Exception("ERROR in DELETE");
                 }
             }
             $currentDT = new DateTime();
             $currentDTFormat = $currentDT->format('m/d/Y H:i:s');
             $this->fmdb->setupFMDataAPIforDB($failTable);
-            $recordId = $this->fmdb->fmData->{$failTable}->create(array(
+            $recordId = $this->fmdb->fmData->{$failTable}->create(array(// @phpstan-ignore property.notFound
                 'ip' => $ip,
                 'username' => $username,
                 'dt' => $currentDTFormat,
@@ -1505,11 +1505,11 @@ class DB_Auth_Handler_FileMaker_DataAPI extends DB_Auth_Common
             if (!is_numeric($recordId)) {
                 $this->logger->setDebugMessage(
                     $this->fmdb->stringWithoutCredential(
-                        'FileMakerLayout: ' . $this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                        'FileMakerLayout: ' . $this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
                 throw new Exception("ERROR in INSERT");
             }
             $this->logger->setDebugMessage(
-                $this->fmdb->stringWithoutCredential($this->fmdb->fmData->{$failTable}->getDebugInfo()));
+                $this->fmdb->stringWithoutCredential($this->fmdb->fmData->{$failTable}->getDebugInfo()));// @phpstan-ignore property.notFound
         } catch (\Exception $e) {
             $this->fmdb->errorMessageStore("[authSupportAddAuthFail] ERROR: {$e->getMessage()}");
         }
