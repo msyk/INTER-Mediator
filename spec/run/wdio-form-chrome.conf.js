@@ -67,7 +67,7 @@ exports.config = {
     //
     browserName: 'chrome',
     'wdio:enforceWebDriverClassic': true,
-    unhandledPromptBehavior: 'ignore',
+    unhandledPromptBehavior: 'accept',
     acceptInsecureCerts: true,
     'goog:chromeOptions': {
       args: ['--headless', '--disable-gpu', '--disable-dev-shm-usage', '--no-sandbox'],
