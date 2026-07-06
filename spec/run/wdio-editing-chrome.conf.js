@@ -57,6 +57,8 @@ exports.config = {
     maxInstances: 3,
     //
     browserName: 'chrome',
+    'wdio:enforceWebDriverClassic': true,
+    unhandledPromptBehavior: 'ignore',
     acceptInsecureCerts: true,
     'goog:chromeOptions': {
       args: ['--headless', '--disable-gpu', '--disable-dev-shm-usage', '--no-sandbox', '--window-size=1280,800'],
