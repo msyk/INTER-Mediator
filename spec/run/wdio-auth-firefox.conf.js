@@ -71,7 +71,7 @@ exports.config = {
     //
     browserName: 'firefox',
     'wdio:enforceWebDriverClassic': true,
-    unhandledPromptBehavior: 'ignore',
+    unhandledPromptBehavior: 'accept',
     'moz:firefoxOptions': {
       args: ['-headless']
     }
