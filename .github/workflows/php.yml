@@ -3,18 +3,45 @@ name: unit-test
 on:
   push:
     branches:
-      - "*"
+      - master
+      - 16-8.1
+      - 16-8.2
+      - 16-8.3
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
+      - 16-8.1
+      - 16-8.2
+      - 16-8.3
 
 jobs:
   run:
     runs-on: ${{ matrix.operating-system }}
+    if: |
+      (github.event_name == 'push' && github.ref == format('refs/heads/{0}', matrix.branch)) ||
+      (github.event_name == 'pull_request' && github.base_ref == matrix.branch)
     strategy:
+      fail-fast: false
       matrix:
-        operating-system: [ 'ubuntu-latest' ]
-        #        operating-system: [ubuntu-latest, macos-latest, windows-latest]
-        php-versions: [ '8.3', '8.4','8.5', 'nightly' ]
+        include:
+          - operating-system: 'ubuntu-latest'
+            php-versions: '8.1'
+            branch: '16-8.1'
+          - operating-system: 'ubuntu-latest'
+            php-versions: '8.2'
+            branch: '16-8.2'
+          - operating-system: 'ubuntu-latest'
+            php-versions: '8.3'
+            branch: '16-8.3'
+          - operating-system: 'ubuntu-latest'
+            php-versions: '8.4'
+            branch: 'master'
+          - operating-system: 'ubuntu-latest'
+            php-versions: '8.5'
+            branch: 'master'
+          - operating-system: 'ubuntu-latest'
+            php-versions: 'nightly'
+            branch: 'master'
     name: Unit Test on ${{ matrix.operating-system }} with PHP ${{ matrix.php-versions }}
     services:
       mysql: # https://qiita.com/sayama0402/items/e863ffb597ce87bf2e2f
