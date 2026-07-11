@@ -502,6 +502,9 @@ class DB_Auth_Handler_PDO extends DB_Auth_Common
             return false;
         }
         $this->logger->setDebugMessage("[authSupportChangePassword] {$sql}");
+        if (Params::getParameterValue('inactivatingOnFails', false) > 0) {
+            $this->authSupportSetInactive($signedUser, false);
+        }
         return true;
     }
 
@@ -1502,7 +1505,7 @@ class DB_Auth_Handler_PDO extends DB_Auth_Common
      * @return void
      * @throws Exception If the user table is not configured, the database connection fails, or the query errors.
      */
-    public function authSupportSetInactive(string $uid, bool $value):void
+    public function authSupportSetInactive(string $uid, bool $value): void
     {
         try {
             $authUser = $this->authSupportUnifyUsernameAndEmail($uid) ?? "";
