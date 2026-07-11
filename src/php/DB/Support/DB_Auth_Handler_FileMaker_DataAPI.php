@@ -308,7 +308,7 @@ class DB_Auth_Handler_FileMaker_DataAPI extends DB_Auth_Common
                     $this->fmdb->fmDataAuth->{$hashTable}->delete($recordId);
                 } catch (Exception $e) {
                     $this->logger->setDebugMessage(
-                        $this->fmdb->stringWithoutCredential(get_class($result) . ': ' .
+                        $this->fmdb->stringWithoutCredential('Delete pperation: ' .
                             $this->fmdb->fmDataAuth->{$hashTable}->getDebugInfo()));
                     return false;
                 }
