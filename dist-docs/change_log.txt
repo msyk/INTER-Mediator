@@ -11,6 +11,8 @@ Also the Migration Guide (Japanese) might be informative:
   https://inter-mediator.info/ja/for-developers/migration.html
 
 Ver.16 (in Development)
+- The big "Debugging" text on the page when the debug mode is active. Don't forget to disable the debug mode when
+  you release your application.
 
 Ver.15 (May 24, 2026)
 - Passkey authentication is supported. The $authStoring variable or the "storing" key value have to set the "passkey".
