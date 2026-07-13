@@ -927,7 +927,7 @@ class DB_Auth_Handler_PDO extends DB_Auth_Common
         if (!$this->pdoDB->setupConnection()) { //Establish the connection
             return false;
         }
-        $sql = "{$this->pdoDB->handler->sqlSELECTCommand()}hash,expired FROM {$hashTable} WHERE"
+        $sql = "{$this->pdoDB->handler->sqlSELECTCommand()}id,hash,expired FROM {$hashTable} WHERE"
             . " user_id = " . $this->pdoDB->link->quote($userid)
             . " and clienthost = " . $this->pdoDB->link->quote($randdata);
         $result = $this->pdoDB->link->query($sql);
@@ -936,16 +936,27 @@ class DB_Auth_Handler_PDO extends DB_Auth_Common
             return false;
         }
         $this->logger->setDebugMessage("[authSupportCheckIssuedHashForResetPassword] {$sql}");
+        $isResult = false;
+        $deleteIds = [];
         foreach ($result->fetchAll(\PDO::FETCH_ASSOC) as $row) {
             $hashValue = $row['hash'];
             if (IMUtil::secondsFromNow($row['expired']) > Params::getParameterValue('limitPwChangeSecond', 3600)) {
-                return false;
+                $deleteIds[]=$row['id'];
             }
-            if ($hash === $hashValue) {
-                return true;
+            if (hash_equals($hash, $hashValue)) {
+                $isResult = true;
+                $deleteIds[]=$row['id'];
             }
         }
-        return false;
+        // Delete valid credential to prevent other reset requests.
+        foreach($deleteIds as $id) {
+            $sql = "{$this->pdoDB->handler->sqlDELETECommand()}{$hashTable} WHERE id = " . intval($id);
+            $result = $this->pdoDB->link->query($sql);
+            if ($result === false) {
+                $this->pdoDB->errorMessageStore('ERROR in DELETE:' . $sql);
+            }
+        }
+        return $isResult;
     }
 
     /** Starts user enrollment.
