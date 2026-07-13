@@ -296,6 +296,7 @@ $dontRecordDownloadNoGet = false; */
  * =================== */
 $mediaRootDir = "/tmp"; // Supposed to macOS
 //$cacheMediaAccess = false;
+$allowedMediaFileRootDirs = [$mediaRootDir, ]; // Just for file:/// (File URL) media file path.
 
 /* S3 Support
  * =================== */
