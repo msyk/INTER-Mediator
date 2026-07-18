@@ -99,7 +99,7 @@ class FileURL extends UploadingSupport implements DownloadingSupport
             throw new Exception("[INTER-Mediator] The file doesn't exist: {$target}.");
         }
         $isInAllowed = array_reduce($allowedMediaFileRootDirs,
-            fn($carry, $item) => $carry || starts_with($resolvedTarget, realpath($item) ?: $item));
+            fn($carry, $item) => $carry || str_starts_with($resolvedTarget, realpath($item) ?: $item));
 //        $isInAllowed = array_reduce($allowedMediaFileRootDirs,
 //            fn($carry, $item) => $carry || str_starts_with($target, $item), false);
         if (!$isInAllowed) {
