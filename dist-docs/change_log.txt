@@ -15,6 +15,9 @@ Ver.16 (in Development)
 - The composer.json/lock files support the minor versions of PHP with git branches/tags.
 - After any login failure, the account is going to be disabled. The $inactivatingOnFails variable in the params.php
   file has been to set the failing count. Also the authuser table has to have the "inactivated" column.
+- The $allowedMediaFileRootDirs variable can be set to limit the file path of the media file in FileURL media type.
+- The TestDB.fp7 is removed from the repository because it's so old version.
+- Some missing tables in TestDB.fmp12 are defined.
 
 Ver.15 (May 24, 2026)
 - Passkey authentication is supported. The $authStoring variable or the "storing" key value have to set the "passkey".
