@@ -942,8 +942,7 @@ class DB_Auth_Handler_PDO extends DB_Auth_Common
             $hashValue = $row['hash'];
             if (IMUtil::secondsFromNow($row['expired']) > Params::getParameterValue('limitPwChangeSecond', 3600)) {
                 $deleteIds[]=$row['id'];
-            }
-            if (hash_equals($hash, $hashValue)) {
+            } else if (hash_equals($hash, $hashValue)) {
                 $isResult = true;
                 $deleteIds[]=$row['id'];
             }

@@ -94,8 +94,14 @@ class FileURL extends UploadingSupport implements DownloadingSupport
     {
         $mediaRootDir = Params::getParameterValue("mediaRootDir", null);
         $allowedMediaFileRootDirs = Params::getParameterValue("allowedMediaFileRootDirs", [$mediaRootDir]);
+        $resolvedTarget = realpath($target);
+        if ($resolvedTarget === false) {
+            throw new Exception("[INTER-Mediator] The file doesn't exist: {$target}.");
+        }
         $isInAllowed = array_reduce($allowedMediaFileRootDirs,
-            fn($carry, $item) => $carry || str_starts_with($target, $item), false);
+            fn($carry, $item) => $carry || starts_with($resolvedTarget, realpath($item) ?: $item));
+//        $isInAllowed = array_reduce($allowedMediaFileRootDirs,
+//            fn($carry, $item) => $carry || str_starts_with($target, $item), false);
         if (!$isInAllowed) {
             throw new Exception("[INTER-Mediator] The file does't exist in the allowed directory: {$target}.");
         }
