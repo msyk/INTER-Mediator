@@ -9,7 +9,9 @@ cd "${originalPath}"
 
 IFS=',' read -ra versionArray <<< "$versions"
 for ver in "${versionArray[@]}"; do
-    echo "======\nProcessing ${baseVersion}-${ver}"
+    echo "================"
+    echo "Processing ${baseVersion}-${ver}"
+    echo "================"
     git checkout master
     rm composer.json composer.lock
     cp -f "${seedComposer}${ver}.json" "${originalPath}/composer.json"
@@ -24,7 +26,6 @@ for ver in "${versionArray[@]}"; do
     git tag -d "${baseVersion}-${ver}"
     git tag "${baseVersion}-${ver}"
     git push origin --delete "Ver.${baseVersion}-PHP${ver}"
-    git push pull "Ver.${baseVersion}-PHP${ver}"
     git push origin "Ver.${baseVersion}-PHP${ver}"
     git push origin --delete "${baseVersion}-${ver}"
     git push origin "${baseVersion}-${ver}"
