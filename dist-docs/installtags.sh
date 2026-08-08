@@ -17,8 +17,8 @@ for ver in "${versionArray[@]}"; do
     echo "================"
     echo "Processing ${baseVersion}-${ver}"
     echo "================"
-    git push stream --delete "${baseVersion}-${ver}"
-    git push stream "${baseVersion}-${ver}"
+    git push upstream --delete "${baseVersion}-${ver}"
+    git push upstream "${baseVersion}-${ver}"
 done
 # git push origin --tags
 # git checkout master
