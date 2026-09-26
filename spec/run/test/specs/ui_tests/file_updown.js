@@ -170,6 +170,7 @@ module.exports = (AuthPage, isUserAuth = false, isUppy = false) => {
         }
         await browser.refresh()
         await browser.pause(waiting)
+        await AuthPage.logoutLink.waitForClickable() // Extra waiting.
 
         await expect(AuthPage.fieldsItemUploading).toBeElementsArrayOfSize(currentRecords + 2)
         await expect(AuthPage.fieldsItemPic).toBeElementsArrayOfSize(currentRecords + 2)
