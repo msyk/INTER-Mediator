@@ -20,6 +20,14 @@ Ver.16 (in Development)
 - Some missing tables in TestDB.fmp12 are defined.
 - The big "Debugging" text on the page when the debug mode is active. Don't forget to disable the debug mode when
   you release your application.
+- The file uploading component 'Uppy' is introduced in the INTER-Mediator with plug-in.
+- [Bug Fix] Fixed the bug that the non-repeater nodes inside the enclosure disappeared when the context was partially
+  reconstructed, e.g. switching the record of the detail context with the navi-control's master/detail feature.
+- File uploading and displaying are restricted for security reasons. The following variables can be described
+  in the params.php file to allow the specified items.
+  - $allowedMediaFileRootDirs: directories allowed for file:/// media paths.
+  - $uploadAllowedExtensions: file extensions allowed for upload.
+  - $mediaClassAllowed: classes allowed for media access.
 
 Ver.15 (May 24, 2026)
 - Passkey authentication is supported. The $authStoring variable or the "storing" key value have to set the "passkey".

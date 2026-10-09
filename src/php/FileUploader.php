@@ -371,7 +371,7 @@ class FileUploader
             $parsedUrl = parse_url($url);
 
             $util = new IMUtil();
-            if ($util->checkHost($parsedUrl['host'], $webServerName)) {
+            if ($util->checkHost($parsedUrl['host'] ?? '', $webServerName)) {
                 return TRUE;
             }
         }

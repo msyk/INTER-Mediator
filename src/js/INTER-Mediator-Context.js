@@ -551,10 +551,38 @@ class IMLibContext {
     let childContexts = []
     seekRemovingContext(this)
     regIds = IMLibContextPool.removeContextsFromPool(childContexts)
-    while (this.enclosureNode.firstChild) {
-      this.enclosureNode.removeChild(this.enclosureNode.lastChild)
+    const repNodeTag = INTERMediatorLib.repeaterTagFromEncTag(this.enclosureNode.tagName)
+    const children = Array.from(this.enclosureNode.childNodes)
+    for (const child of children) {
+      if (isGeneratedNode(child, repNodeTag)) {
+        this.enclosureNode.removeChild(child)
+      }
     }
     await INTERMediator_DBAdapter.unregister(regIds)
+
+    function isGeneratedNode(node, repNodeTag) {
+      if (node.nodeType !== 1) {
+        return false
+      }
+      if (repNodeTag && node.tagName === repNodeTag) {
+        return true
+      }
+      const imControl = node.getAttribute('data-im-control')
+      if (imControl && (imControl.indexOf(INTERMediatorLib.roleAsRepeaterDataControlName) > -1 ||
+        imControl.indexOf(INTERMediatorLib.roleAsSeparatorDataControlName) > -1 ||
+        imControl.indexOf(INTERMediatorLib.roleAsFooterDataControlName) > -1 ||
+        imControl.indexOf(INTERMediatorLib.roleAsHeaderDataControlName) > -1 ||
+        imControl.indexOf(INTERMediatorLib.roleAsNoResultDataControlName) > -1)) {
+        return true
+      }
+      const className = node.getAttribute('class')
+      if (className && (className.indexOf(INTERMediatorLib.roleAsRepeaterClassName) > -1 ||
+        className.indexOf('IM_Button_BackNavi') > -1 || className.indexOf('IM_Button_Insert') > -1)) {
+        return true
+      }
+      return Array.from(node.children).some((c) => c.classList.contains('IM_Button_Insert') ||
+        c.classList.contains('IM_Button_BackNavi'))
+    }
 
     function seekRemovingContext(context) {
       let myChildren
