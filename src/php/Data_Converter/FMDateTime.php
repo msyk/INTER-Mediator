@@ -22,7 +22,7 @@ use INTERMediator\Locale\IMLocale;
 /**
  *
  */
-class FMDateTime
+class FMDateTime implements DataConverter
 {
 
     /** @var string

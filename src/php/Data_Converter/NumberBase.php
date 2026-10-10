@@ -20,7 +20,7 @@ use INTERMediator\Locale\IMLocale;
 /**
  *
  */
-class NumberBase
+class NumberBase implements DataConverter
 {
     /** @var string
      */
@@ -67,5 +67,13 @@ class NumberBase
         } else {
             return (string)$intPart;
         }
+    }
+
+    /** @param string $str
+     * @return string|null
+     */
+    function converterFromDBtoUser(?string $str): string
+    {
+        return $str;
     }
 }

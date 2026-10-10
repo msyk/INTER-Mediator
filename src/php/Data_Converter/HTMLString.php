@@ -18,7 +18,7 @@ namespace INTERMediator\Data_Converter;
 /**
  *
  */
-class HTMLString
+class HTMLString implements DataConverter
 {
     /** @var bool
      */

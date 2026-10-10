@@ -254,10 +254,12 @@ class InstallerPlugin implements PluginInterface, EventSubscriberInterface
         // HTTPS peer verification succeeds even when PHP has no curl.cainfo
         // configured, which is the default on Windows.
         $caBundle = CaBundle::getSystemCaRootBundlePath();
-        if (is_dir($caBundle)) {
-            curl_setopt($curl, CURLOPT_CAPATH, $caBundle);
-        } else {
-            curl_setopt($curl, CURLOPT_CAINFO, $caBundle);
+        if (strlen($caBundle) > 0) {
+            if (is_dir($caBundle)) {
+                curl_setopt($curl, CURLOPT_CAPATH, $caBundle);
+            } else {
+                curl_setopt($curl, CURLOPT_CAINFO, $caBundle);
+            }
         }
         $contents = curl_exec($curl);
         $errorMessage = curl_error($curl);

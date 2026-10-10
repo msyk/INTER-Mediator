@@ -804,9 +804,10 @@ class DB_Auth_Handler_FileMaker_DataAPI extends DB_Auth_Common
             $hashValue = $record->hash;
             $expiredDT = $record->expired;
 
-            $expired = strptime($expiredDT, "%m/%d/%Y %H:%M:%S");
-            $expiredValue = mktime($expired['tm_hour'], $expired['tm_min'], $expired['tm_sec'],
-                $expired['tm_mon'] + 1, $expired['tm_mday'], $expired['tm_year'] + 1900);
+//            $expired = strptime($expiredDT, "%m/%d/%Y %H:%M:%S");
+            $expired = date_parse_from_format("m/d/Y H:i:s", $expiredDT);
+            $expiredValue = mktime(intval($expired['hour']), intval($expired['minute']), intval($expired['second']),
+                intval($expired['month']), intval($expired['day']), intval($expired['year']));
             $currentDT = new DateTime();
             $timeValue = $currentDT->format("U");
             if ($timeValue > $expiredValue + Params::getParameterValue('limitPwChangeSecond', 3600)) {

@@ -45,7 +45,7 @@ class Export
     protected string $endOfLine = "\n";
 
     /** Processes export of context data to CSV and outputs the file to the browser.
-     * @param array<array<string, number|string|bool|null|array<array<string, number|string|bool|null>>>> $contextData The data to export.
+     * @param array<array<float|int|string|null>> $contextData The data to export.
      * @param array<array<string, number|string|bool|null>>|null $options Optional export options.
      * @return void
      * @throws CannotInsertRecord

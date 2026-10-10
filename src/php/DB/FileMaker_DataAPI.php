@@ -64,9 +64,9 @@ class FileMaker_DataAPI extends DBClass
      */
     private ?string $softDeleteField = null;
     /** Value used for soft deletion.
-     * @var string|null
+     * @var string|int|null
      */
-    private ?string $softDeleteValue = null;
+    private string|int|null $softDeleteValue = null;
     /** Whether setDataToUpdatedRecord was used.
      * @var bool
      */
@@ -161,10 +161,10 @@ class FileMaker_DataAPI extends DBClass
 
     /** Activate soft deletion.
      * @param string $field The field name for soft deletion.
-     * @param string $value The value for soft deletion.
+     * @param string|int|null $value The value for soft deletion.
      * @return void
      */
-    public function softDeleteActivate(string $field, string|int $value): void
+    public function softDeleteActivate(string $field, string|int|null $value): void
     {
         $this->softDeleteField = $field;
         $this->softDeleteValue = $value;
@@ -349,10 +349,10 @@ class FileMaker_DataAPI extends DBClass
         if (is_array($scriptContext)) {
             foreach ($scriptContext as $condition) {
                 if (isset($condition['situation']) && isset($condition['definition'])) {
-                    $scriptName = str_replace('&', '', $condition['definition']);
+                    $scriptName = str_replace('&', '', strval($condition['definition']));
                     $parameter = '';
                     if (!empty($condition['parameter'])) {
-                        $parameter = str_replace('&', '', $condition['parameter']);
+                        $parameter = str_replace('&', '', strval($condition['parameter']));
                     }
                     switch ($condition['situation']) {
                         case 'post':
@@ -478,11 +478,11 @@ class FileMaker_DataAPI extends DBClass
                 } else {
                     if (isset($condition['operator'])) {
                         $condition = $this->normalizedCondition($condition);
-                        if (!$this->specHandler->isPossibleOperator($condition['operator'])) {
+                        if (!$this->specHandler->isPossibleOperator(strval($condition['operator']))) {
                             throw new Exception("Invalid Operator.: {$condition['operator']}");
                         }
                         $searchConditions[] = $this->setSearchConditionsForCompoundFound(
-                            $condition['field'], $condition['value'], $condition['operator']);
+                            strval($condition['field']), strval($condition['value']), strval($condition['operator']));
                     } else {
                         $searchConditions[] = $this->setSearchConditionsForCompoundFound(
                             $condition['field'], $condition['value']);
@@ -508,7 +508,7 @@ class FileMaker_DataAPI extends DBClass
                     $dummy = 1;
                 } else {
                     $condition = $this->normalizedCondition($condition);
-                    if (!$this->specHandler->isPossibleOperator($condition['operator'])) {
+                    if (!$this->specHandler->isPossibleOperator(strval($condition['operator']))) {
                         throw new Exception("Invalid Operator.: {$condition['field']}/{$condition['operator']}");
                     }
 
@@ -519,7 +519,7 @@ class FileMaker_DataAPI extends DBClass
                     }
 
                     $searchConditions[] = $this->setSearchConditionsForCompoundFound(
-                        $condition['field'], $condition['value'], $condition['operator']);
+                        strval($condition['field']), strval($condition['value']), strval($condition['operator']));
 
                     if (isset($condition['operator']) && $condition['operator'] === 'neq') {
                         $neqConditions[] = TRUE;
@@ -544,14 +544,14 @@ class FileMaker_DataAPI extends DBClass
                         $foreignOperator = $relDef['operator'] ?? 'eq';
                         $formattedValue = $this->formatter->formatterToDB(
                             "{$tableName}{$this->dbSettings->getSeparator()}{$foreignField}", $foreignValue);
-                        if (!$this->specHandler->isPossibleOperator($foreignOperator)) {
+                        if (!$this->specHandler->isPossibleOperator(strval($foreignOperator))) {
                             throw new Exception("Invalid Operator.: {$relDef['operator']}");
                         }
                         if ($useOrOperation) {
                             throw new Exception("Condition Incompatible.: The OR operation and foreign key can't set both on the query. This is the limitation of the Custom Web of FileMaker Server.");
                         }
                         $searchConditions[] = $this->setSearchConditionsForCompoundFound(
-                            $foreignField, $formattedValue, $foreignOperator);
+                            $foreignField, $formattedValue, strval($foreignOperator));
 
                         if ($foreignOperator === 'neq') {
                             $neqConditions[] = TRUE;
@@ -609,7 +609,7 @@ class FileMaker_DataAPI extends DBClass
                 throw new Exception("Condition Incompatible.: The soft-delete record and OR operation can't set both on the query. This is the limitation of the Custom Web of FileMaker Server.");
             }
             $searchConditions[] = $this->setSearchConditionsForCompoundFound(
-                $this->softDeleteField, $this->softDeleteValue, 'neq');
+                $this->softDeleteField, strval($this->softDeleteValue), 'neq');
             $neqConditions[] = TRUE;
         }
 
@@ -688,7 +688,7 @@ class FileMaker_DataAPI extends DBClass
         }
 
         $request = filter_input_array(INPUT_POST);
-        if (!is_null($request)) {
+        if (!is_null($request) && $request !== false) {
             foreach ($request as $key => $val) {
                 if (str_starts_with($key, 'sortkey') && str_ends_with($key, 'field')) {
                     $orderNum = substr($key, 7, 1);
@@ -781,7 +781,7 @@ class FileMaker_DataAPI extends DBClass
                             foreach ($result->{$portalName}->getFieldNames() as $relatedFieldName) {
                                 if (str_contains($relatedFieldName, '::')) {
                                     $dotPos = strpos($relatedFieldName, '::');
-                                    $tableOccurrence = substr($relatedFieldName, 0, $dotPos);
+                                    $tableOccurrence = substr($relatedFieldName, 0, intval($dotPos));
                                     if (!isset($relatedArray[$tableOccurrence][$recId])) {
                                         $relatedArray[$tableOccurrence][$recId] = ['recordId' => $recId];
                                     }
@@ -919,13 +919,13 @@ class FileMaker_DataAPI extends DBClass
             foreach ($tableInfo['query'] as $condition) {
                 if (!$this->dbSettings->getPrimaryKeyOnly() || $condition['field'] == $primaryKey) {
                     $condition = $this->normalizedCondition($condition);
-                    if (!$this->specHandler->isPossibleOperator($condition['operator'])) {
+                    if (!$this->specHandler->isPossibleOperator(strval($condition['operator']))) {
                         throw new Exception("Invalid Operator.");
                     }
                     $convertedValue = $this->formatter->formatterToDB(
                         "{$tableSourceName}{$this->dbSettings->getSeparator()}{$condition['field']}",
-                        $condition['value']);
-                    $data += array($condition['field'] => $convertedValue);
+                        strval($condition['value']));
+                    $data += array(strval($condition['field']) => $convertedValue);
                 }
             }
         }
@@ -933,12 +933,13 @@ class FileMaker_DataAPI extends DBClass
         foreach ($this->dbSettings->getExtraCriteria() as $value) {
             if (!$this->dbSettings->getPrimaryKeyOnly() || $value['field'] == $primaryKey) {
                 $value = $this->normalizedCondition($value);
-                if (!$this->specHandler->isPossibleOperator($value['operator'])) {
+                if (!$this->specHandler->isPossibleOperator(strval($value['operator']))) {
                     throw new Exception("Invalid Operator.: {$value['operator']}");
                 }
                 $convertedValue = $this->formatter->formatterToDB(
-                    "{$tableSourceName}{$this->dbSettings->getSeparator()}{$value['field']}", $value['value']);
-                $data += array($value['field'] => $convertedValue);
+                    "{$tableSourceName}{$this->dbSettings->getSeparator()}{$value['field']}",
+                    strval($value['value']));
+                $data += array(strval($value['field']) => $convertedValue);
             }
         }
         if (isset($tableInfo['authentication'])
@@ -990,7 +991,7 @@ class FileMaker_DataAPI extends DBClass
         $data = array();
         $portal = array();
         if (isset($condition[0]['recordId']) && count($condition) === 1) { // @phpstan-ignore-line identical.alwaysTrue
-            $recordId = str_replace('=', '', $condition[0]['recordId']);
+            $recordId = str_replace('=', '', strval($condition[0]['recordId']));
             if (is_numeric($recordId)) {
                 $result = $this->fmData->{$layout}->getRecord($recordId);
             }
@@ -1330,10 +1331,10 @@ class FileMaker_DataAPI extends DBClass
 
         foreach ($this->dbSettings->getExtraCriteria() as $value) {
             $value = $this->normalizedCondition($value);
-            if (!$this->specHandler->isPossibleOperator($value['operator'])) {
+            if (!$this->specHandler->isPossibleOperator(strval($value['operator']))) {
                 throw new Exception("Invalid Operator.");
             }
-            $condition += array($value['field'] => $value['value']);
+            $condition += array(strval($value['field']) => $value['value']);
         }
         if (isset($context['authentication'])
             && (isset($context['authentication']['all'])

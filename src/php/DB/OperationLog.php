@@ -149,8 +149,9 @@ class OperationLog
             if ($userValue === '') {
                 $cookieNameUser = "_im_username";
                 if (isset($this->contextOptions['authentication']['realm'])) {
-                    $cookieNameUser .= ('_' . str_replace(" ", "_",
-                            str_replace(".", "_", $this->contextOptions['authentication']['realm'])));
+                    $cookieNameUser .= (
+                        '_' . str_replace(" ", "_", str_replace(".", "_",
+                            $this->contextOptions['authentication']['realm'])));
                 }
                 $userValue = $_COOKIE[$cookieNameUser] ?? '';
             }

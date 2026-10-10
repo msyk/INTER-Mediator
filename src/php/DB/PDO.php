@@ -75,9 +75,9 @@ class PDO extends DBClass
     private ?string $softDeleteField = null;
 
     /** Value used for soft deletion.
-     * @var string|null
+     * @var string|int|null
      */
-    private ?string $softDeleteValue = null;
+    private string|int|null $softDeleteValue = null;
 
     /** Whether setDataToUpdatedRecord was used.
      * @var bool
@@ -189,10 +189,10 @@ class PDO extends DBClass
 
     /** Activates soft deletion.
      * @param string $field
-     * @param string $value
+     * @param string|int|null $value
      * @return void
      */
-    public function softDeleteActivate(string $field, string|int $value): void
+    public function softDeleteActivate(string $field, string|int|null $value): void
     {
         $this->softDeleteField = $field;
         $this->softDeleteValue = $value;
@@ -376,7 +376,7 @@ class PDO extends DBClass
                 $this->errorMessageStore('[ERROR] SQL:' . $sql);
                 return null;
             }
-            $this->mainTableCount = $isAggregate ? $result->rowCount() : $result->fetchColumn(0);
+            $this->mainTableCount = $isAggregate ? $result->rowCount() : intval($result->fetchColumn(0));
 
             if ($queryClause === '') {
                 $this->mainTableTotalCount = $this->mainTableCount;
@@ -390,7 +390,7 @@ class PDO extends DBClass
                     $this->errorMessageStore('[ERROR] SQL:' . $sql);
                     return null;
                 }
-                $this->mainTableTotalCount = $isAggregate ? $result->rowCount() : $result->fetchColumn(0);
+                $this->mainTableTotalCount = $isAggregate ? $result->rowCount() : intval($result->fetchColumn(0));
             }
         }
         $sql = "{$this->handler->sqlSELECTCommand()}{$fields} FROM {$viewOrTableName} {$queryClause} {$groupBy} "
@@ -1156,9 +1156,11 @@ class PDO extends DBClass
     {
         $sqlResult = array();
         $isFirstRow = true;
-        foreach ($result->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $sqlResult[] = $this->getResultRecord($row, $isFirstRow, $timeFields);
-            $isFirstRow = false;
+        if ($result !== false && !is_null($result)) {
+            foreach ($result->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+                $sqlResult[] = $this->getResultRecord($row, $isFirstRow, $timeFields);
+                $isFirstRow = false;
+            }
         }
         return $sqlResult;
     }
