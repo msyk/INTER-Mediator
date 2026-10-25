@@ -34,9 +34,6 @@ class DefinitionChecker
      */
     public function checkDefinitions(?array $dataSource, ?array $options, ?array $dbSpecification): string
     {
-//        if ($dbSpecification['db-class'] == 'FileMaker_FX') {
-//            require_once('FileMaker_FX.php');
-//        }
         $allMessage = '';
         if ($dataSource === NULL) {
             $allMessage .= "*** The Data Sources of the Definition must be specified. ***";
@@ -64,10 +61,10 @@ class DefinitionChecker
      */
     public function checkDefinition(?array $definition, array $prohibit): void
     {
+        $this->message = '';
         if ($definition === NULL) {
             return;
         }
-        $this->message = '';
         $this->path = [];
         $this->currentProhibit = $prohibit;
         $this->moveChildren($definition);
@@ -100,58 +97,107 @@ class DefinitionChecker
                     array_pop($this->path);
                 }
             } else {
-                $this->message .= "$currentPath should be define as array. ";
+                $this->message .= "$currentPath should be defined as array. ";
             }
+        } else if (is_null($endPoint)) {
+            $this->message .= "$currentPath includes an undefined keyword. ";
         } else {
             $judge = false;
-            if (is_null($endPoint)) {
-                $this->message .= "$currentPath includes an undefined keyword. ";
-            } else if ($endPoint === 'string') {
-                if (!is_string($items)) {
-                    $this->message .= "$currentPath should be define as string. ";
-                }
-            } else if ($endPoint === 'scalar') {
-                if (!is_scalar($items)) {
-                    $this->message .= "$currentPath should be define as string. ";
-                }
-            } else if ($endPoint === 'boolean') {
-                if (!is_bool($items)) {
-                    $this->message .= "$currentPath should be define as boolean. ";
-                }
-            } else if ($endPoint === 'integer') {
-                if (!is_integer($items)) {
-                    $this->message .= "$currentPath should be define as integer. ";
-                }
-            } else if ($endPoint === 'array') {
-                if (!is_array($items)) {
-                    $this->message .= "$currentPath should be define as array. ";
-                }
-            } else if (str_starts_with('string', $endPoint)) {
-                $openParen = strpos('(', $endPoint);
-                $closeParen = strpos(')', $endPoint);
-                $possibleString = substr($endPoint, $openParen + 1, $closeParen - $openParen - 1);
-                $possibleValues = explode("|", $possibleString);
-                $possibleWilds = [];
-                foreach ($possibleValues as $str) {
-                    if (str_contains($str, '*')) {
-                        $possibleWilds[] = $str;
-                    }
-                }
-                if (in_array($items, $possibleValues)) {
+            $descriptions = [];
+            foreach ($this->splitTypes((string)$endPoint) as $type) {
+                $descriptions[] = $this->describeType($type);
+                if ($this->matchType($type, $items)) {
                     $judge = true;
-                } else {
-                    foreach ($possibleWilds as $str) {
-                        if (preg_match($str, $items)) {
-                            $judge = true;
-                            break;
-                        }
-                    }
-                }
-                if (!$judge) {
-                    $this->message = "$currentPath should be define as string within [$possibleString]. ";
+                    break;
                 }
             }
+            if (!$judge) {
+                $this->message .= "$currentPath should be defined as " . implode(' or ', $descriptions) . ". ";
+            }
         }
+    }
+
+    /** Splits a type specification by '|' outside of parentheses.
+     * @param string $spec Type specification such as 'boolean|string(a|b)'.
+     * @return string[] Individual type specifications.
+     */
+    private function splitTypes(string $spec): array
+    {
+        $result = [];
+        $depth = 0;
+        $current = '';
+        foreach (str_split($spec) as $c) {
+            if ($c === '(') {
+                $depth++;
+            } else if ($c === ')') {
+                $depth--;
+            }
+            if ($c === '|' && $depth === 0) {
+                $result[] = $current;
+                $current = '';
+            } else {
+                $current .= $c;
+            }
+        }
+        $result[] = $current;
+        return $result;
+    }
+
+    /** Returns a human-readable description of a single type specification.
+     * @param string $type Single type specification.
+     * @return string Description.
+     */
+    private function describeType(string $type): string
+    {
+        if (preg_match('/^string\((.*)\)$/', $type, $matches)) {
+            return "string within [{$matches[1]}]";
+        }
+        return $type;
+    }
+
+    /** Checks whether a value matches a single type specification.
+     * @param string $type Single type specification.
+     * @param mixed $items Value to check.
+     * @return bool True if the value matches.
+     */
+    private function matchType(string $type, mixed $items): bool
+    {
+        switch ($type) {
+            case 'string':
+                return is_string($items);
+            case 'scalar':
+                return is_scalar($items);
+            case 'boolean':
+                return is_bool($items);
+            case 'integer':
+                return is_integer($items);
+            case 'array':
+                return is_array($items);
+        }
+        if (preg_match('/^string\((.*)\)$/', $type, $matches)) {
+            if (!is_string($items)) {
+                return false;
+            }
+            $words = preg_split('/\s+/', $items, -1, PREG_SPLIT_NO_EMPTY);
+            if (empty($words)) {
+                return false;
+            }
+            $possibleValues = explode('|', $matches[1]);
+            foreach ($words as $word) {
+                $isMatched = false;
+                foreach ($possibleValues as $str) {
+                    if ($str === $word || (str_contains($str, '*') && fnmatch($str, $word))) {
+                        $isMatched = true;
+                        break;
+                    }
+                }
+                if (!$isMatched) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        throw new \InvalidArgumentException("Unknown type specification: {$type}");
     }
 
     /** DefinitionChecker constructor.
@@ -200,7 +246,7 @@ class DefinitionChecker
         'user' => 'string',
         'password' => 'string',
         'server' => 'string',
-        'port' => 'string',
+        'port' => 'string|integer',
         'protocol' => 'string',
         'datatype' => 'string',
         'external-db' => ['#' => 'string'],
@@ -247,7 +293,7 @@ class DefinitionChecker
             'is-required-2FA' => 'boolean',
             'digits-of-2FA-Code' => 'integer',
             'mail-context-2FA' => 'string',
-            'expiring-seconds-2FA' => 'interger',
+            'expiring-seconds-2FA' => 'integer',
             'passkey-only-on-auth' => 'boolean',
             'add-class-authn' => 'boolean',
             'passkey-error-alerting' => 'boolean',
@@ -261,7 +307,7 @@ class DefinitionChecker
         'smtp' => [
             'protocol' => 'string',
             'server' => 'string',
-            'port' => 'integer',
+            'port' => 'string|integer',
             'encryption' => 'string',
             'username' => 'string',
             'password' => 'string',
@@ -447,12 +493,12 @@ class DefinitionChecker
             'protect-reading' => 'array',
             'db-class' => 'string',
             'dsn' => 'string',
-            'option' => 'string',
+            'option' => 'array',
             'database' => 'string',
             'user' => 'string',
             'password' => 'string',
             'server' => 'string',
-            'port' => 'string',
+            'port' => 'string|integer',
             'protocol' => 'string',
             'datatype' => 'string',
             'cert-verifying' => 'boolean',
@@ -471,7 +517,7 @@ class DefinitionChecker
                 '*' => [
                     'field' => 'string',
                     'context' => 'string',
-                    'container' => 'boolean|string(FileSystem|FileMakerContainer|S3|Dropbox|FileURL)',
+                    'container' => 'boolean|string(FileSystem|FileMaker|FileMakerContainer|S3|Dropbox|FileURL)',
                     'file-name' => 'string',
                 ]
             ],

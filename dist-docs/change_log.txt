@@ -30,6 +30,8 @@ Ver.16 (in Development)
   - $mediaClassAllowed: classes allowed for media access.
 - TCPDF was changed to tc-lib-pdf for PHP 8.2 or later. The sample to generate a PDF is in the sample/Sample_pdf directory.
 - The webauthn-lib is updated, and the PublicKeyCredentialSource class is replaced with CredentialRecord.
+- [BUG FIX] Fixed an issue where contexts requiring synchronization were not updated correctly when a context was
+  updated after data modification, or when a context was rebuilt
 
 Ver.15 (May 24, 2026)
 - Passkey authentication is supported. The $authStoring variable or the "storing" key value have to set the "passkey".

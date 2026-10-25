@@ -173,4 +173,130 @@ class GenerateJSCode_Test extends TestCase
         unlink($file);
     }
 
+    public function test_pathFromDocumentRoot(): void
+    {
+        $method = new ReflectionMethod('\INTERMediator\GenerateJSCode', 'pathFromDocumentRoot');
+        $imRoot = dirname(__FILE__, 4);
+        $parent = dirname($imRoot);
+        $this->assertSame('/' . basename($imRoot) . '/src',
+            $method->invokeArgs($this->generater, [$imRoot . '/src', $parent]));
+        $this->assertSame('/' . basename($imRoot) . '/src',
+            $method->invokeArgs($this->generater, [$imRoot . '/src', $parent . '/']));
+        $this->assertSame('', $method->invokeArgs($this->generater, [$imRoot, $imRoot]));
+        $this->assertNull($method->invokeArgs($this->generater, [$parent, $imRoot]));
+        $this->assertNull($method->invokeArgs($this->generater, [$imRoot . '-not-exist', $parent]));
+        $this->assertNull($method->invokeArgs($this->generater, [$imRoot . '/src', $imRoot . '/sr']));
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function test_decideServiceServerHost(): void
+    {
+        $method = new ReflectionMethod('\INTERMediator\GenerateJSCode', 'decideServiceServerHost');
+        $decide = fn($configured, $httpHost, $serverAddr) => (function () use ($method, $configured, $httpHost, $serverAddr) {
+            unset($_SERVER['HTTP_HOST'], $_SERVER['SERVER_ADDR']);
+            if (!is_null($httpHost)) {
+                $_SERVER['HTTP_HOST'] = $httpHost;
+            }
+            if (!is_null($serverAddr)) {
+                $_SERVER['SERVER_ADDR'] = $serverAddr;
+            }
+            return $method->invokeArgs($this->generater, [$configured]);
+        })();
+
+        $this->assertSame('ss.example.com', $decide('ss.example.com', 'www.example.com', '172.17.0.2'));
+        $this->assertSame('www.example.com', $decide(null, 'www.example.com', '172.17.0.2'));
+        $this->assertSame('www.example.com', $decide('', 'www.example.com:8080', '172.17.0.2'));
+        $this->assertSame('www.example.com', $decide('  ', 'www.example.com', null));
+        $this->assertSame('[::1]', $decide(null, '[::1]:8080', null));
+        $this->assertSame('[::1]', $decide(null, '[::1]', null));
+        $this->assertSame('172.17.0.2', $decide(null, null, '172.17.0.2'));
+        $this->assertSame('[::1]', $decide(null, '', '::1'));
+        $this->assertSame('localhost', $decide(null, null, null));
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function test_serviceServerURLPrefersHttpHost(): void
+    {
+        $_SERVER['SERVER_ADDR'] = '172.17.0.2';
+        \INTERMediator\Params::setVar('serviceServerHost', '');
+        $output = $this->generateInitialCode();
+        $this->assertStringContainsString('INTERMediatorOnPage.serviceServerURL="ws://localhost:', $output);
+    }
+
+    private function generateInitialCode(?array $dataSource = [], ?array $options = [],
+                                         array  $dbSpec = ['db-class' => 'PDO']): string
+    {
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        ob_start();
+        try {
+            $this->generater->generateInitialJSCode($dataSource, $options, $dbSpec, false);
+        } finally {
+            $output = strval(ob_get_clean());
+        }
+        return $output;
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function test_entryPathWithoutReferer(): void
+    {
+        unset($_SERVER['HTTP_REFERER'], $_SERVER['QUERY_STRING']);
+        $_SERVER['SCRIPT_NAME'] = '/app/def.php';
+        $output = $this->generateInitialCode();
+        $this->assertStringContainsString('INTERMediatorOnPage.getEntryPath=function(){return "/app/def.php";}', $output);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function test_pathsOutsideDocumentRoot(): void
+    {
+        $_SERVER['DOCUMENT_ROOT'] = sys_get_temp_dir();
+        $output = $this->generateInitialCode();
+        $this->assertStringContainsString("INTERMediatorOnPage.getEditorPath=function(){return '';}", $output);
+        $this->assertStringContainsString('INTERMediatorOnPage.getPathToIMRoot=function(){return "";}', $output);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function test_pathsInsideDocumentRoot(): void
+    {
+        $imRoot = dirname(__FILE__, 4);
+        $_SERVER['DOCUMENT_ROOT'] = dirname($imRoot);
+        $_SERVER['SCRIPT_NAME'] = '/' . basename($imRoot) . '/samples/index.html';
+        $output = $this->generateInitialCode();
+        $imName = basename($imRoot);
+        $this->assertStringContainsString(
+            "INTERMediatorOnPage.getPathToIMRoot=function(){return \"/{$imName}\";}", $output);
+        if (is_file($imRoot . '/editors/defedit.html')) {
+            $this->assertStringContainsString(
+                "INTERMediatorOnPage.getEditorPath=function(){return \"/{$imName}/editors/defedit.html?target=../samples/index.html\";}",
+                $output);
+        }
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function test_localContextIgnoresItemsWithoutKey(): void
+    {
+        $output = $this->generateInitialCode([], ['local-context' => [
+            ['key' => 'a', 'value' => 1],
+            ['value' => 2],
+            ['key' => 'b'],
+        ]]);
+        $this->assertStringContainsString("INTERMediatorOnPage.initLocalContext={'a':'1','b':''};", $output);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function test_oAuthNotAvailableWhenAllProvidersInvalid(): void
+    {
+        \INTERMediator\Params::setVar('oAuth', ['NoSuchProvider' => ['ClientId' => 'x'], 'Broken' => 'not-array']);
+        $output = $this->generateInitialCode();
+        $this->assertStringContainsString('IMLibAuthenticationUI.isOAuthAvailable=false;', $output);
+        $this->assertStringContainsString('IMLibAuthentication.oAuthParams={};', $output);
+        $this->assertStringNotContainsString('oAuthParams["NoSuchProvider"]', $output);
+    }
+
 }
