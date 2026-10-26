@@ -149,6 +149,11 @@ class GenerateJSCode_Test extends TestCase
         $this->assertStringContainsString($partOfCode, $content);
     }
 
+    /**
+     * Test that the entry path embedded in generated JS code is escaped against script injection.
+     *
+     * @return void
+     */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function test_entryPathIsEscaped(): void
@@ -164,6 +169,11 @@ class GenerateJSCode_Test extends TestCase
         $this->assertStringNotContainsString('?a=";alert(1)', $output);
     }
 
+    /**
+     * Test that readJSSource skips the line following an '@@IM@@IgnoringNextLine' marker.
+     *
+     * @return void
+     */
     public function test_readJSSourceIgnoringNextLine(): void
     {
         $file = tempnam(sys_get_temp_dir(), 'imjs');
@@ -173,6 +183,11 @@ class GenerateJSCode_Test extends TestCase
         unlink($file);
     }
 
+    /**
+     * Test that pathFromDocumentRoot converts a filesystem path to a document-root relative path.
+     *
+     * @return void
+     */
     public function test_pathFromDocumentRoot(): void
     {
         $method = new ReflectionMethod('\INTERMediator\GenerateJSCode', 'pathFromDocumentRoot');
@@ -188,6 +203,12 @@ class GenerateJSCode_Test extends TestCase
         $this->assertNull($method->invokeArgs($this->generater, [$imRoot . '/src', $imRoot . '/sr']));
     }
 
+    /**
+     * Test that decideServiceServerHost resolves the service server host from the configured value,
+     * HTTP_HOST, SERVER_ADDR, or the localhost fallback.
+     *
+     * @return void
+     */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function test_decideServiceServerHost(): void
@@ -215,6 +236,11 @@ class GenerateJSCode_Test extends TestCase
         $this->assertSame('localhost', $decide(null, null, null));
     }
 
+    /**
+     * Test that the generated service server URL prefers HTTP_HOST over SERVER_ADDR.
+     *
+     * @return void
+     */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function test_serviceServerURLPrefersHttpHost(): void
@@ -225,6 +251,14 @@ class GenerateJSCode_Test extends TestCase
         $this->assertStringContainsString('INTERMediatorOnPage.serviceServerURL="ws://localhost:', $output);
     }
 
+    /**
+     * Generate the initial JS code and capture its output.
+     *
+     * @param array<int|string, mixed>|null $dataSource The data source definitions.
+     * @param array<int|string, mixed>|null $options The option definitions.
+     * @param array<string, mixed> $dbSpec The DB specification.
+     * @return string The captured JS output.
+     */
     private function generateInitialCode(?array $dataSource = [], ?array $options = [],
                                          array  $dbSpec = ['db-class' => 'PDO']): string
     {
@@ -238,6 +272,11 @@ class GenerateJSCode_Test extends TestCase
         return $output;
     }
 
+    /**
+     * Test that the entry path falls back to SCRIPT_NAME when no referer or query string is set.
+     *
+     * @return void
+     */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function test_entryPathWithoutReferer(): void
@@ -248,6 +287,11 @@ class GenerateJSCode_Test extends TestCase
         $this->assertStringContainsString('INTERMediatorOnPage.getEntryPath=function(){return "/app/def.php";}', $output);
     }
 
+    /**
+     * Test that generated paths are empty when INTER-Mediator is outside the document root.
+     *
+     * @return void
+     */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function test_pathsOutsideDocumentRoot(): void
@@ -258,6 +302,11 @@ class GenerateJSCode_Test extends TestCase
         $this->assertStringContainsString('INTERMediatorOnPage.getPathToIMRoot=function(){return "";}', $output);
     }
 
+    /**
+     * Test that generated paths are document-root relative when INTER-Mediator is inside the document root.
+     *
+     * @return void
+     */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function test_pathsInsideDocumentRoot(): void
@@ -276,6 +325,11 @@ class GenerateJSCode_Test extends TestCase
         }
     }
 
+    /**
+     * Test that local-context items without a key are ignored in the generated JS code.
+     *
+     * @return void
+     */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function test_localContextIgnoresItemsWithoutKey(): void
@@ -288,6 +342,11 @@ class GenerateJSCode_Test extends TestCase
         $this->assertStringContainsString("INTERMediatorOnPage.initLocalContext={'a':'1','b':''};", $output);
     }
 
+    /**
+     * Test that OAuth is reported unavailable when all configured providers are invalid.
+     *
+     * @return void
+     */
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
     public function test_oAuthNotAvailableWhenAllProvidersInvalid(): void

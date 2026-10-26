@@ -10,7 +10,13 @@ use PHPUnit\Framework\TestCase;
 class Theme_Test extends TestCase
 {
     private string $altThemeDir;
+    private ?Theme $theme = null;
 
+    /**
+     * Set up the test environment.
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->altThemeDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'im-theme-test-' . bin2hex(random_bytes(4));
@@ -34,6 +40,11 @@ class Theme_Test extends TestCase
         $_SERVER['SCRIPT_NAME'] = '/app/def.php';
     }
 
+    /**
+     * Tear down the test environment.
+     *
+     * @return void
+     */
     protected function tearDown(): void
     {
         Params::setVar('altThemePath', null);
@@ -47,19 +58,31 @@ class Theme_Test extends TestCase
         rmdir($this->altThemeDir);
     }
 
-    private function request(array $get, ?string $deffile = null, ?Theme &$theme = null): string
+    /**
+     * Issue a request to the Theme class and capture its output.
+     *
+     * @param array<string, string> $get The $_GET parameters to simulate.
+     * @param string|null $deffile The deffile path to pass to Theme::processing().
+     * @return string The captured output.
+     */
+    private function request(array $get, ?string $deffile = null): string
     {
         $_GET = $get;
-        $theme = new Theme();
+        $this->theme = new Theme();
         ob_start();
         try {
-            $theme->processing($deffile);
+            $this->theme->processing($deffile);
         } finally {
             $output = strval(ob_get_clean());
         }
         return $output;
     }
 
+    /**
+     * Data provider of malicious or invalid requests.
+     *
+     * @return array<string, array<int, array<string, string>>> The data set.
+     */
     public static function maliciousRequestProvider(): array
     {
         return [
@@ -75,14 +98,25 @@ class Theme_Test extends TestCase
         ];
     }
 
+    /**
+     * Test that requests for resources outside the theme directory, or missing resources, are rejected.
+     *
+     * @param array<string, string> $get The $_GET parameters to simulate.
+     * @return void
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('maliciousRequestProvider')]
     public function testRejectsOutsideOrMissingResources(array $get): void
     {
-        $output = $this->request($get, null, $theme);
+        $output = $this->request($get, null);
         $this->assertSame('', $output);
-        $this->assertArrayHasKey('processing', $theme->getResultForLog());
+        $this->assertArrayHasKey('processing', $this->theme->getResultForLog());
     }
 
+    /**
+     * Test that an image file within a theme is returned correctly.
+     *
+     * @return void
+     */
     public function testReturnsImageInTheme(): void
     {
         $this->assertSame('PNGDATA', $this->request(['theme' => 'custom', 'type' => 'images', 'name' => 'a.png']));
@@ -95,6 +129,11 @@ class Theme_Test extends TestCase
         $this->assertStringStartsWith('GIF', $output);
     }
 
+    /**
+     * Test that URLs within CSS files are replaced and encoded correctly.
+     *
+     * @return void
+     */
     public function testCSSURLsAreReplacedAndEncoded(): void
     {
         $output = $this->request(['theme' => 'custom', 'type' => 'css'], '/var/www/app/def.php');
@@ -109,6 +148,11 @@ class Theme_Test extends TestCase
         $this->assertStringContainsString(".g{background:url(\"{$prefix}..%2Fimages%2Fg.png{$suffix}\")}", $output);
     }
 
+    /**
+     * Test that CSS injection attempts through the theme name parameter are encoded.
+     *
+     * @return void
+     */
     public function testCSSInjectionThroughThemeNameIsEncoded(): void
     {
         mkdir($this->altThemeDir . '/x);}body{color:red', 0777, true);
@@ -119,6 +163,11 @@ class Theme_Test extends TestCase
         $this->assertStringContainsString('theme=x%29%3B%7Dbody%7Bcolor%3Ared', $output);
     }
 
+    /**
+     * Test that a deffile path outside the document root is not embedded in the output.
+     *
+     * @return void
+     */
     public function testDeffileOutsideDocumentRootIsNotEmbedded(): void
     {
         $_SERVER['DOCUMENT_ROOT'] = '';

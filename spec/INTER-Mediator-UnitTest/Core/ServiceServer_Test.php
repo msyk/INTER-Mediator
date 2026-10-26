@@ -15,7 +15,8 @@ class ServiceServer_Test extends TestCase
     public function test_instantiate(): void
     {
         $ssProxy = ServiceServerProxy::instance();
-        $this->assertNotNull($ssProxy, "The ServiceServerProxy instance has to get.");
+        // $this->assertNotNull($ssProxy, "The ServiceServerProxy instance has to get.");
+        // phpstan reports Call to method PHPUnit\Framework\Assert::assertNotNull() with INTERMediator\ServiceServerProxy and 'The…' will always evaluate to true.
 
         $checkResult = $ssProxy->checkServiceServer();
         $this->assertFalse($checkResult, "Usually the service server is offline.");

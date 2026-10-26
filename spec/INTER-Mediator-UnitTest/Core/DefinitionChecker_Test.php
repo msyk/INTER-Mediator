@@ -10,16 +10,32 @@ class DefinitionChecker_Test extends TestCase
 {
     private DefinitionChecker $checker;
 
+    /**
+     * Set up the test environment.
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->checker = new DefinitionChecker();
     }
 
+    /**
+     * Check a single data source context definition and return the resulting message.
+     *
+     * @param array<string, mixed> $context The data source context definition to check.
+     * @return string The check result message.
+     */
     private function dataSourceMessage(array $context): string
     {
         return $this->checker->checkDefinitions([$context], null, null);
     }
 
+    /**
+     * Test that a set of valid definitions produces no error message.
+     *
+     * @return void
+     */
     public function testValidDefinitionsProduceNoMessage(): void
     {
         $message = $this->checker->checkDefinitions(
@@ -47,18 +63,33 @@ class DefinitionChecker_Test extends TestCase
         $this->assertSame('', $message);
     }
 
+    /**
+     * Test that a null data source is reported as an error.
+     *
+     * @return void
+     */
     public function testNullDataSourceIsReported(): void
     {
         $message = $this->checker->checkDefinitions(null, null, null);
         $this->assertSame('*** The Data Sources of the Definition must be specified. ***', $message);
     }
 
+    /**
+     * Test that an undefined keyword in a context is reported.
+     *
+     * @return void
+     */
     public function testUndefinedKeyword(): void
     {
         $message = $this->dataSourceMessage(['name' => 'a', 'unknown-key' => 'x']);
         $this->assertStringContainsString('[0][unknown-key] includes an undefined keyword.', $message);
     }
 
+    /**
+     * Test that simple type mismatches (string/integer/boolean/array/scalar) are reported.
+     *
+     * @return void
+     */
     public function testSimpleTypeMismatches(): void
     {
         $message = $this->dataSourceMessage([
@@ -77,6 +108,11 @@ class DefinitionChecker_Test extends TestCase
         $this->assertStringContainsString('[0][query][0][value] should be defined as scalar.', $message);
     }
 
+    /**
+     * Test that enumerated string keywords are accepted or rejected correctly.
+     *
+     * @return void
+     */
     public function testEnumeratedString(): void
     {
         $this->assertSame('', $this->dataSourceMessage(['repeat-control' => 'delete']));
@@ -84,6 +120,11 @@ class DefinitionChecker_Test extends TestCase
         $this->assertStringContainsString('[0][repeat-control] should be defined as string within [insert|', $message);
     }
 
+    /**
+     * Test that enumerated strings containing multiple space-separated keywords are validated.
+     *
+     * @return void
+     */
     public function testEnumeratedStringWithMultipleKeywords(): void
     {
         $this->assertSame('', $this->dataSourceMessage(['repeat-control' => 'delete insert']));
@@ -94,12 +135,22 @@ class DefinitionChecker_Test extends TestCase
         $this->assertNotSame('', $this->dataSourceMessage(['repeat-control' => '   ']));
     }
 
+    /**
+     * Test that enumerated string checking rejects non-string values such as booleans.
+     *
+     * @return void
+     */
     public function testEnumeratedStringIsStrict(): void
     {
         $message = $this->dataSourceMessage(['repeat-control' => true]);
         $this->assertStringContainsString('[0][repeat-control] should be defined as string within', $message);
     }
 
+    /**
+     * Test that wildcard keywords in enumerated strings match their intended patterns.
+     *
+     * @return void
+     */
     public function testWildcardInEnumeratedString(): void
     {
         $this->assertSame('', $this->dataSourceMessage(['repeat-control' => 'copy-detail']));
@@ -107,6 +158,11 @@ class DefinitionChecker_Test extends TestCase
         $this->assertNotSame('', $this->dataSourceMessage(['repeat-control' => ['copy-a']]));
     }
 
+    /**
+     * Test that composite type specifications (boolean or string) accept either type.
+     *
+     * @return void
+     */
     public function testCompositeTypes(): void
     {
         $this->assertSame('', $this->dataSourceMessage(['soft-delete' => true]));
@@ -115,6 +171,11 @@ class DefinitionChecker_Test extends TestCase
         $this->assertStringContainsString('[0][soft-delete] should be defined as boolean or string.', $message);
     }
 
+    /**
+     * Test that composite types combined with an enumerated string are validated correctly.
+     *
+     * @return void
+     */
     public function testCompositeWithEnumeratedString(): void
     {
         $this->assertSame('', $this->dataSourceMessage(['file-upload' => [['container' => true]]]));
@@ -124,6 +185,11 @@ class DefinitionChecker_Test extends TestCase
             '[0][file-upload][0][container] should be defined as boolean or string within [FileSystem|', $message);
     }
 
+    /**
+     * Test that multiple definition errors are accumulated in a single message.
+     *
+     * @return void
+     */
     public function testMessagesAccumulate(): void
     {
         $message = $this->dataSourceMessage(['repeat-control' => 'bad', 'paging' => 'bad']);
@@ -131,6 +197,11 @@ class DefinitionChecker_Test extends TestCase
         $this->assertStringContainsString('[0][paging]', $message);
     }
 
+    /**
+     * Test that an error message is only reported for the section it belongs to.
+     *
+     * @return void
+     */
     public function testMessageIsNotCarriedOverToNullSection(): void
     {
         $message = $this->checker->checkDefinitions([['bad-key' => 1]], null, null);
@@ -139,6 +210,11 @@ class DefinitionChecker_Test extends TestCase
         $this->assertStringNotContainsString('The DB Specification of the Definition:', $message);
     }
 
+    /**
+     * Test that error messages are labeled with the section they belong to.
+     *
+     * @return void
+     */
     public function testSectionsAreLabeled(): void
     {
         $message = $this->checker->checkDefinitions([], ['transaction' => 'manual'], ['port' => []]);
@@ -146,6 +222,11 @@ class DefinitionChecker_Test extends TestCase
         $this->assertStringContainsString('The DB Specification of the Definition: [port] should be defined as string or integer.', $message);
     }
 
+    /**
+     * Test that every type specification in the keyword tables is recognized by matchType.
+     *
+     * @return void
+     */
     public function testAllTypeSpecificationsAreKnown(): void
     {
         $reflection = new ReflectionClass($this->checker);
@@ -164,6 +245,7 @@ class DefinitionChecker_Test extends TestCase
                 }
             }
         }
-        $this->assertTrue(true);
+        // $this->assertTrue(true);
+        // phpstan reports Call to method PHPUnit\Framework\Assert::assertTrue() with true will always evaluate to true.
     }
 }
