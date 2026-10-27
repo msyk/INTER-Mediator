@@ -87,13 +87,7 @@ class MediaAccess_Test extends TestCase
         if (!function_exists('xdebug_get_headers')) {
             $this->markTestSkipped('xdebug_get_headers() is unavailable to verify sent headers.');
         }
-        $headerFound = false;
-        foreach (xdebug_get_headers() as $header) {
-            if (str_contains($header, '403')) {
-                $headerFound = true;
-            }
-        }
-        $this->assertTrue($headerFound, 'Expected a 403 header to be sent.');
+        $this->assertTrue(http_response_code() === 403, 'Expected a 403 status code to be sent.');
     }
 
     /**
