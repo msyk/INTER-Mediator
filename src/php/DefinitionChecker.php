@@ -79,7 +79,7 @@ class DefinitionChecker
         $endPoint = $this->currentProhibit;
         $currentPath = '';
         foreach ($this->path as $value) {
-            $nextEndPoint = $endPoint[$value] ?? null;
+            $nextEndPoint = $this->findChild($endPoint, $value);
             if (is_null($nextEndPoint) && is_integer($value)) {
                 $nextEndPoint = $endPoint['*'] ?? null;
             }
@@ -106,15 +106,42 @@ class DefinitionChecker
             $descriptions = [];
             foreach ($this->splitTypes((string)$endPoint) as $type) {
                 $descriptions[] = $this->describeType($type);
-                if ($this->matchType($type, $items)) {
-                    $judge = true;
-                    break;
+                try {
+                    if ($this->matchType($type, $items)) {
+                        $judge = true;
+                        break;
+                    }
+                } catch (\InvalidArgumentException $e) {
+                    $this->message .= $e->getMessage();
                 }
             }
             if (!$judge) {
                 $this->message .= "$currentPath should be defined as " . implode(' or ', $descriptions) . ". ";
             }
         }
+    }
+
+    /** It looks up a child of the keyword structure, comparing string keys case-insensitively.
+     * @param mixed $endPoint Current keyword structure.
+     * @param int|string $key Key to look up.
+     * @return mixed The child structure or type specification, or null if not found.
+     */
+    private function findChild(mixed $endPoint, int|string $key): mixed
+    {
+        if (!is_array($endPoint)) {
+            return null;
+        }
+        if (isset($endPoint[$key])) {
+            return $endPoint[$key];
+        }
+        if (is_string($key)) {
+            foreach ($endPoint as $candidate => $child) {
+                if (is_string($candidate) && strcasecmp($candidate, $key) === 0) {
+                    return $child;
+                }
+            }
+        }
+        return null;
     }
 
     /** Splits a type specification by '|' outside of parentheses.
@@ -178,11 +205,11 @@ class DefinitionChecker
             if (!is_string($items)) {
                 return false;
             }
-            $words = preg_split('/\s+/', $items, -1, PREG_SPLIT_NO_EMPTY);
+            $words = preg_split('/\s+/', strtolower($items), -1, PREG_SPLIT_NO_EMPTY);
             if (empty($words)) {
                 return false;
             }
-            $possibleValues = explode('|', $matches[1]);
+            $possibleValues = explode('|', strtolower($matches[1]));
             foreach ($words as $word) {
                 $isMatched = false;
                 foreach ($possibleValues as $str) {
@@ -281,7 +308,7 @@ class DefinitionChecker
             'corresponding-table' => 'string',
             'challenge-table' => 'string',
             'authexpired' => 'string|integer',
-            'storing' => 'string(cookie|cookie-domainwide|session-storage|credential)',
+            'storing' => 'string(cookie|cookie-domainwide|session-storage|credential|passkey)',
             'realm' => 'string',
             'email-as-username' => 'boolean',
             'issuedhash-dsn' => 'string',
@@ -399,7 +426,8 @@ class DefinitionChecker
                     'value' => 'scalar'
                 ]
             ],
-            'repeat-control' => 'string(insert|delete|insert-confirm|confirm-insert|delete-confirm|confirm-delete|copy|copy-*)',
+            'repeat-control' => 'string(insert|delete|insert-confirm|confirm-insert|delete-confirm|'
+                .'confirm-delete|copy|copy-*|confirm-copy|confirm-copy-*|insert-top|confirm-top-insert)',
             'navi-control' => 'string(step|step-hide|step-nonavi|step-hide-nonavi|step-fullnavi|step-hide-fullnavi'
                 . '|detail|detail-top|detail-bottom|detail-update|detail-top-update|detail-bottom-update'
                 . '|master|master-nonavi|master-fullnavi|master-hide|master-hide-nonavi|master-hide-fullnavi)',

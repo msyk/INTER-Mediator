@@ -308,7 +308,6 @@ class ServiceServerProxy
      */
     private function startServer(): void
     {
-        $dq = '"';
         $this->messages[] = $this->messageHead . "startServer() called";
         $nodemon = IMUtil::isPHPExecutingWindows() ? "nodemon.cmd" : "nodemon";
         $scriptPath = "src/js/Service_Server.js";

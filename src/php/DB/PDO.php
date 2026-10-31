@@ -594,7 +594,7 @@ class PDO extends DBClass
         $queryClause = $this->getWhereClause('update',
             false, true, $signedUser, $bypassAuth);
         if ($queryClause == '') {
-            $this->errorMessageStore('Don\'t update with no ciriteria. queryClause=' . $queryClause);
+            $this->errorMessageStore('Don\'t update with no criteria. queryClause=' . $queryClause);
             return false;
         }
         $queryClause = "WHERE {$queryClause}";
@@ -857,7 +857,7 @@ class PDO extends DBClass
         }
         $queryClause = $this->getWhereClause('delete', false, true, $signedUser);
         if ($queryClause == '') {
-            $this->errorMessageStore('Don\'t delete with no ciriteria. queryClause=' . $queryClause);
+            $this->errorMessageStore('Don\'t delete with no criteria. queryClause=' . $queryClause);
             return false;
         }
         $sql = "{$this->handler->sqlDELETECommand()}{$tableName} WHERE {$queryClause}";
@@ -924,7 +924,7 @@ class PDO extends DBClass
         //======
         $queryClause = $this->getWhereClause('delete', false, true, $signedUser);
         if ($queryClause == '') {
-            $this->errorMessageStore('Don\'t copy with no ciriteria.');
+            $this->errorMessageStore('Don\'t copy with no criteria.');
             return null;
         }
         $defaultValues = array();

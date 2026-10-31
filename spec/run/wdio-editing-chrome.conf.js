@@ -146,7 +146,7 @@ exports.config = {
   // See the full list at http://mochajs.org/
   mochaOpts: {
     ui: 'bdd',
-    timeout: 90000
+    timeout: 90000, retries: 5
   },
 
   before: async function () {

@@ -159,6 +159,25 @@ class DefinitionChecker_Test extends TestCase
     }
 
     /**
+     * Test that keywords and enumerated values are checked case-insensitively.
+     *
+     * @return void
+     */
+    public function testCaseInsensitive(): void
+    {
+        $this->assertSame('', $this->dataSourceMessage(['Name' => 'a', 'REPEAT-CONTROL' => 'Insert Confirm-Delete']));
+        $this->assertSame('', $this->dataSourceMessage(['repeat-control' => 'COPY-Detail']));
+        $this->assertSame('', $this->dataSourceMessage(['file-upload' => [['Container' => 'filesystem']]]));
+        $this->assertSame('', $this->checker->checkDefinitions([], [
+            'Transaction' => 'NONE',
+            'authentication' => ['is-required-2fa' => true, 'DIGITS-OF-2FA-CODE' => 6, 'method-2FA' => 'Email'],
+            'import' => ['format' => 'csv'],
+        ], ['DB-Class' => 'PDO']));
+        $this->assertNotSame('', $this->dataSourceMessage(['NAMES' => 'a']));
+        $this->assertNotSame('', $this->dataSourceMessage(['repeat-control' => 'REMOVE']));
+    }
+
+    /**
      * Test that composite type specifications (boolean or string) accept either type.
      *
      * @return void
