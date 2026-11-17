@@ -106,6 +106,9 @@
       "inter-mediator/inter-mediator": true
     },
     "policy": {
+      "cooldown": {
+        "period": "8 days"
+      },
       "advisories": {
         "ignore-id": [
           "PKSA-569h-6vqh-5xr3",

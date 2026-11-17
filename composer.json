@@ -19,7 +19,7 @@
     "ext-intl": "*",
     "ext-fileinfo": "*",
     "ext-bcmath": "*",
-    "inter-mediator/fmdataapi": ">=38",
+    "inter-mediator/fmdataapi": ">=37",
     "tecnickcom/tc-lib-pdf": "^8",
     "aws/aws-sdk-php": "~3",
     "simplesamlphp/simplesamlphp": "^2.4.0",

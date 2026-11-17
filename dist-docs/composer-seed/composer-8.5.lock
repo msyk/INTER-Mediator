@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c429f64e59ce53cffef36e7ccb8be9c",
+    "content-hash": "d3dea456e28de250fed5ddda75e3a0e8",
     "packages": [
         {
             "name": "async-aws/core",
@@ -10539,16 +10539,16 @@
         },
         {
             "name": "web-token/jwt-framework",
-            "version": "4.2.5",
+            "version": "4.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-token/jwt-framework.git",
-                "reference": "384243095203af7a1b44789c2babd003be185a7e"
+                "reference": "d3215780eb033c7e625b94c68f9eb904a0f5ed9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-framework/zipball/384243095203af7a1b44789c2babd003be185a7e",
-                "reference": "384243095203af7a1b44789c2babd003be185a7e",
+                "url": "https://api.github.com/repos/web-token/jwt-framework/zipball/d3215780eb033c7e625b94c68f9eb904a0f5ed9b",
+                "reference": "d3215780eb033c7e625b94c68f9eb904a0f5ed9b",
                 "shasum": ""
             },
             "require": {
@@ -10641,7 +10641,7 @@
             ],
             "support": {
                 "issues": "https://github.com/web-token/jwt-framework/issues",
-                "source": "https://github.com/web-token/jwt-framework/tree/4.2.5"
+                "source": "https://github.com/web-token/jwt-framework/tree/4.2.7"
             },
             "funding": [
                 {
@@ -10653,8 +10653,8 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-11-05T20:02:24+00:00",
-            "published-time": "2026-11-05T20:02:55+00:00"
+            "time": "2026-11-08T15:03:43+00:00",
+            "published-time": "2026-11-08T15:13:43+00:00"
         },
         {
             "name": "webmozart/assert",
