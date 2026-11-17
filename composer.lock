@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c429f64e59ce53cffef36e7ccb8be9c",
+    "content-hash": "3e31b01ffe15c8e13043894bfa234f05",
     "packages": [
         {
             "name": "async-aws/core",
@@ -199,16 +199,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.403.1",
+            "version": "3.403.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "608a2c79f57fd3dd54d0dff1e98e9c124f3cb96c"
+                "reference": "6e52905dabd868c1bc7fd491e0deec6f78a0f7d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/608a2c79f57fd3dd54d0dff1e98e9c124f3cb96c",
-                "reference": "608a2c79f57fd3dd54d0dff1e98e9c124f3cb96c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6e52905dabd868c1bc7fd491e0deec6f78a0f7d1",
+                "reference": "6e52905dabd868c1bc7fd491e0deec6f78a0f7d1",
                 "shasum": ""
             },
             "require": {
@@ -290,10 +290,10 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.403.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.403.5"
             },
-            "time": "2026-11-06T19:34:26+00:00",
-            "published-time": "2026-11-06T19:42:21+00:00"
+            "time": "2026-11-12T19:40:30+00:00",
+            "published-time": "2026-11-12T19:48:17+00:00"
         },
         {
             "name": "brick/math",
@@ -501,16 +501,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.11.1",
+            "version": "2.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "472b418967419c6124edd91dc6310a3bec091dae"
+                "reference": "12c820dbc3f030954b1d09f5884fcf1e9d29d6cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/472b418967419c6124edd91dc6310a3bec091dae",
-                "reference": "472b418967419c6124edd91dc6310a3bec091dae",
+                "url": "https://api.github.com/repos/composer/composer/zipball/12c820dbc3f030954b1d09f5884fcf1e9d29d6cb",
+                "reference": "12c820dbc3f030954b1d09f5884fcf1e9d29d6cb",
                 "shasum": ""
             },
             "require": {
@@ -600,7 +600,7 @@
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
                 "security": "https://github.com/composer/composer/security/policy",
-                "source": "https://github.com/composer/composer/tree/2.11.1"
+                "source": "https://github.com/composer/composer/tree/2.11.2"
             },
             "funding": [
                 {
@@ -612,8 +612,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-30T13:52:10+00:00",
-            "published-time": "2026-10-30T14:03:09+00:00"
+            "time": "2026-11-10T09:09:37+00:00",
+            "published-time": "2026-11-10T09:12:59+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -982,20 +982,20 @@
         },
         {
             "name": "doctrine/deprecations",
-            "version": "1.1.6",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca"
+                "reference": "d2e16653a734c8784c1851ad68b02f997b53ca82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
-                "reference": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/d2e16653a734c8784c1851ad68b02f997b53ca82",
+                "reference": "d2e16653a734c8784c1851ad68b02f997b53ca82",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1 || ^8.0"
+                "php": "^7.4 || ^8.0"
             },
             "conflict": {
                 "phpunit/phpunit": "<=7.5 || >=14"
@@ -1024,10 +1024,10 @@
             "homepage": "https://www.doctrine-project.org/",
             "support": {
                 "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/1.1.6"
+                "source": "https://github.com/doctrine/deprecations/tree/1.2.0"
             },
-            "time": "2026-02-07T07:09:04+00:00",
-            "published-time": "2026-02-07T07:10:09+00:00"
+            "time": "2026-11-11T10:04:49+00:00",
+            "published-time": "2026-11-11T10:12:24+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1741,16 +1741,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.13.2",
+            "version": "2.13.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "adee536f95101929f262b8c59e8a61472f347d58"
+                "reference": "6d3cd8285a97eaa352956a4ada92fa03ecce1c4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/adee536f95101929f262b8c59e8a61472f347d58",
-                "reference": "adee536f95101929f262b8c59e8a61472f347d58",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/6d3cd8285a97eaa352956a4ada92fa03ecce1c4e",
+                "reference": "6d3cd8285a97eaa352956a4ada92fa03ecce1c4e",
                 "shasum": ""
             },
             "require": {
@@ -1840,7 +1840,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.13.2"
+                "source": "https://github.com/guzzle/psr7/tree/2.13.3"
             },
             "funding": [
                 {
@@ -1856,21 +1856,21 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-17T23:49:46+00:00",
-            "published-time": "2026-10-17T23:51:00+00:00"
+            "time": "2026-11-12T15:57:42+00:00",
+            "published-time": "2026-11-12T15:58:42+00:00"
         },
         {
             "name": "inter-mediator/fmdataapi",
-            "version": "37",
+            "version": "38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/msyk/FMDataAPI.git",
-                "reference": "469188732c8f5f42fab8e24479f464ab2b09b823"
+                "reference": "581f1c03d09b9b7de696fc09b412b384747a6eb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/msyk/FMDataAPI/zipball/469188732c8f5f42fab8e24479f464ab2b09b823",
-                "reference": "469188732c8f5f42fab8e24479f464ab2b09b823",
+                "url": "https://api.github.com/repos/msyk/FMDataAPI/zipball/581f1c03d09b9b7de696fc09b412b384747a6eb1",
+                "reference": "581f1c03d09b9b7de696fc09b412b384747a6eb1",
                 "shasum": ""
             },
             "require": {
@@ -1891,8 +1891,7 @@
                     "INTERMediator\\FileMakerServer\\RESTAPI\\": "src/"
                 },
                 "classmap": [
-                    "test/FMDataAPIUnitTest.php",
-                    "test/TestProvider.php"
+                    "test/FMDataAPIUnitTest.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1939,6 +1938,15 @@
                 },
                 {
                     "name": "Stathis Askaridis (Contributor)"
+                },
+                {
+                    "name": "filiptorphage-mjuk (Contributor)"
+                },
+                {
+                    "name": "Luca Plozner (Contributor)"
+                },
+                {
+                    "name": "junie-agent (Contributor)"
                 }
             ],
             "description": "FMDataAPI is the class library in PHP for accessing FileMaker database with FileMaker Data API.",
@@ -1962,8 +1970,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-31T00:00:00+00:00",
-            "published-time": "2026-05-31T06:56:50+00:00"
+            "time": "2026-11-13T00:00:00+00:00",
+            "published-time": "2026-11-13T04:30:37+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -3942,16 +3950,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v6.2.5",
+            "version": "v6.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "fb98b170a13003c5961c4cc7d76d0baef657baf9"
+                "reference": "039769ab6133825c414c532d6e524201d8a81bf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/fb98b170a13003c5961c4cc7d76d0baef657baf9",
-                "reference": "fb98b170a13003c5961c4cc7d76d0baef657baf9",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/039769ab6133825c414c532d6e524201d8a81bf3",
+                "reference": "039769ab6133825c414c532d6e524201d8a81bf3",
                 "shasum": ""
             },
             "require": {
@@ -4014,23 +4022,23 @@
             "description": "SAML2 PHP library from SimpleSAMLphp",
             "support": {
                 "issues": "https://github.com/simplesamlphp/saml2/issues",
-                "source": "https://github.com/simplesamlphp/saml2/tree/v6.2.5"
+                "source": "https://github.com/simplesamlphp/saml2/tree/v6.2.6"
             },
-            "time": "2026-11-05T20:28:29+00:00",
-            "published-time": "2026-11-05T20:29:04+00:00"
+            "time": "2026-11-10T21:42:30+00:00",
+            "published-time": "2026-11-10T21:43:06+00:00"
         },
         {
             "name": "simplesamlphp/saml2-legacy",
-            "version": "v4.20.5",
+            "version": "v4.20.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2-legacy.git",
-                "reference": "5ee746a66ef827c7e06fe24fbb1e1789d567f6aa"
+                "reference": "32d05ef083b33b483c0ff9c849839101085ea234"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2-legacy/zipball/5ee746a66ef827c7e06fe24fbb1e1789d567f6aa",
-                "reference": "5ee746a66ef827c7e06fe24fbb1e1789d567f6aa",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2-legacy/zipball/32d05ef083b33b483c0ff9c849839101085ea234",
+                "reference": "32d05ef083b33b483c0ff9c849839101085ea234",
                 "shasum": ""
             },
             "require": {
@@ -4073,23 +4081,23 @@
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
             "support": {
-                "source": "https://github.com/simplesamlphp/saml2-legacy/tree/v4.20.5"
+                "source": "https://github.com/simplesamlphp/saml2-legacy/tree/v4.20.7"
             },
-            "time": "2026-11-05T20:40:01+00:00",
-            "published-time": "2026-11-05T20:42:23+00:00"
+            "time": "2026-11-10T21:13:35+00:00",
+            "published-time": "2026-11-10T21:23:17+00:00"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v2.5.3.1",
+            "version": "2.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/simplesamlphp.git",
-                "reference": "e049be1819327c76403fc0d6fa648d6dcfbc8516"
+                "reference": "3c74e4c93776ec1e25b8db1039053ac999f8c561"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/e049be1819327c76403fc0d6fa648d6dcfbc8516",
-                "reference": "e049be1819327c76403fc0d6fa648d6dcfbc8516",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/3c74e4c93776ec1e25b8db1039053ac999f8c561",
+                "reference": "3c74e4c93776ec1e25b8db1039053ac999f8c561",
                 "shasum": ""
             },
             "require": {
@@ -4153,7 +4161,7 @@
                 "ext-pdo_sqlite": "*",
                 "mikey179/vfsstream": "~1.6",
                 "predis/predis": "~3.3",
-                "simplesamlphp/simplesamlphp-test-framework": "~1.11.6 || dev-master"
+                "simplesamlphp/simplesamlphp-test-framework": "~1.11.7 || dev-master"
             },
             "suggest": {
                 "ext-curl": "Needed in order to check for updates automatically",
@@ -4221,8 +4229,8 @@
                 "issues": "https://github.com/simplesamlphp/simplesamlphp/issues",
                 "source": "https://github.com/simplesamlphp/simplesamlphp"
             },
-            "time": "2026-08-10T11:59:52+00:00",
-            "published-time": "2026-08-10T12:00:42+00:00"
+            "time": "2026-11-09T21:26:11+00:00",
+            "published-time": "2026-11-09T21:41:20+00:00"
         },
         {
             "name": "simplesamlphp/simplesamlphp-assets-base",
@@ -10539,16 +10547,16 @@
         },
         {
             "name": "web-token/jwt-framework",
-            "version": "4.2.5",
+            "version": "4.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-token/jwt-framework.git",
-                "reference": "384243095203af7a1b44789c2babd003be185a7e"
+                "reference": "d3215780eb033c7e625b94c68f9eb904a0f5ed9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-framework/zipball/384243095203af7a1b44789c2babd003be185a7e",
-                "reference": "384243095203af7a1b44789c2babd003be185a7e",
+                "url": "https://api.github.com/repos/web-token/jwt-framework/zipball/d3215780eb033c7e625b94c68f9eb904a0f5ed9b",
+                "reference": "d3215780eb033c7e625b94c68f9eb904a0f5ed9b",
                 "shasum": ""
             },
             "require": {
@@ -10641,7 +10649,7 @@
             ],
             "support": {
                 "issues": "https://github.com/web-token/jwt-framework/issues",
-                "source": "https://github.com/web-token/jwt-framework/tree/4.2.5"
+                "source": "https://github.com/web-token/jwt-framework/tree/4.2.7"
             },
             "funding": [
                 {
@@ -10653,8 +10661,8 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-11-05T20:02:24+00:00",
-            "published-time": "2026-11-05T20:02:55+00:00"
+            "time": "2026-11-08T15:03:43+00:00",
+            "published-time": "2026-11-08T15:13:43+00:00"
         },
         {
             "name": "webmozart/assert",
